@@ -70,7 +70,7 @@
 }
 .current-card::before {
   content: '';
-  position: absolute; inset: 0 0 50% 0;
+  position: absolute; top: 0; right: 0; bottom: 50%; left: 0;
   background: linear-gradient(180deg, rgba(255,255,255,0.55), transparent);
   opacity: 0.55;
   pointer-events: none;
@@ -216,7 +216,7 @@
 }
 .input-block::before {
   content: '';
-  position: absolute; inset: 0 0 60% 0;
+  position: absolute; top: 0; right: 0; bottom: 60%; left: 0;
   background: linear-gradient(180deg, rgba(255,255,255,0.40), transparent);
   pointer-events: none;
 }
@@ -259,7 +259,7 @@
 .next-card::before,
 .done-card::before {
   content: '';
-  position: absolute; inset: 0 0 60% 0;
+  position: absolute; top: 0; right: 0; bottom: 60%; left: 0;
   background: linear-gradient(180deg, rgba(255,255,255,0.45), transparent);
   pointer-events: none;
 }
@@ -309,7 +309,7 @@
   grid-template-columns: 1.2fr 0.8fr;
   gap: 18rpx;
   margin-top: 28rpx;
-  padding: 24rpx 24rpx calc(40rpx + env(safe-area-inset-bottom));
+  padding: 24rpx 24rpx 40rpx;
   background: var(--glass-fill-strong);
   border: 1rpx solid var(--glass-border);
   border-radius: var(--radius-xl);
@@ -321,7 +321,7 @@
 }
 .action-grid::before {
   content: '';
-  position: absolute; inset: 0 0 60% 0;
+  position: absolute; top: 0; right: 0; bottom: 60%; left: 0;
   background: linear-gradient(180deg, rgba(255,255,255,0.50), transparent);
   pointer-events: none;
   border-radius: inherit;

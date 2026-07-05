@@ -31,7 +31,6 @@
   font-weight: 800;
   line-height: 1;
   margin-bottom: 36rpx;
-  font-variant-numeric: tabular-nums;
 }
 
 .timer-ring {

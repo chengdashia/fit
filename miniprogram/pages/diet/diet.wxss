@@ -103,7 +103,7 @@
 }
 .summary-card::before {
   content: '';
-  position: absolute; inset: 0 0 50% 0;
+  position: absolute; top: 0; right: 0; bottom: 50%; left: 0;
   background: linear-gradient(180deg, rgba(255,255,255,0.32), transparent);
   pointer-events: none;
 }
@@ -364,7 +364,7 @@
 /* —— Edit modal —— */
 .modal-overlay {
   position: fixed;
-  inset: 0;
+  top: 0; right: 0; bottom: 0; left: 0;
   background: rgba(17, 24, 39, 0.42);
   backdrop-filter: blur(8rpx);
   -webkit-backdrop-filter: blur(8rpx);
@@ -391,7 +391,7 @@
 }
 .modal-content::before {
   content: '';
-  position: absolute; inset: 0 0 60% 0;
+  position: absolute; top: 0; right: 0; bottom: 60%; left: 0;
   background: linear-gradient(180deg, rgba(255,255,255,0.50), transparent);
   pointer-events: none;
 }

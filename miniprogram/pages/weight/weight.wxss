@@ -359,7 +359,7 @@
 .modal-footer {
   display: flex;
   gap: 20rpx;
-  padding: 24rpx 36rpx calc(36rpx + env(safe-area-inset-bottom));
+  padding: 24rpx 36rpx 36rpx;
 }
 .modal-btn {
   flex: 1;

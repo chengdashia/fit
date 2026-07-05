@@ -8,7 +8,7 @@
 }
 .scroll-body {
   flex: 1;
-  height: calc(100vh - 200rpx);
+  height: 80vh;
 }
 .onboarding-page .container {
   padding: 24rpx 32rpx 48rpx;
@@ -117,7 +117,7 @@
 }
 .goal-card::before {
   content: '';
-  position: absolute; inset: 0 0 60% 0;
+  position: absolute; top: 0; right: 0; bottom: 60%; left: 0;
   background: linear-gradient(180deg, rgba(255,255,255,0.45), transparent);
   pointer-events: none;
 }
@@ -145,7 +145,7 @@
 }
 .goal-icon-wrap::before {
   content: '';
-  position: absolute; inset: 0 0 60% 0;
+  position: absolute; top: 0; right: 0; bottom: 60%; left: 0;
   background: linear-gradient(180deg, rgba(255,255,255,0.42), transparent);
   pointer-events: none;
 }
@@ -200,7 +200,7 @@
 }
 .list-card::before {
   content: '';
-  position: absolute; inset: 0 0 60% 0;
+  position: absolute; top: 0; right: 0; bottom: 60%; left: 0;
   background: linear-gradient(180deg, rgba(255,255,255,0.45), transparent);
   pointer-events: none;
 }
@@ -297,7 +297,7 @@
 /* —— Modal —— */
 .modal-overlay {
   position: fixed;
-  inset: 0;
+  top: 0; right: 0; bottom: 0; left: 0;
   background: rgba(17, 24, 39, 0.42);
   backdrop-filter: blur(8rpx);
   -webkit-backdrop-filter: blur(8rpx);
@@ -323,7 +323,7 @@
 }
 .modal-box::before {
   content: '';
-  position: absolute; inset: 0 0 60% 0;
+  position: absolute; top: 0; right: 0; bottom: 60%; left: 0;
   background: linear-gradient(180deg, rgba(255,255,255,0.50), transparent);
   pointer-events: none;
 }
