@@ -19,14 +19,15 @@
   ],
   "window": {
     "backgroundTextStyle": "dark",
-    "navigationBarBackgroundColor": "#f5f7fa",
+    "navigationBarBackgroundColor": "#ffffff",
     "navigationBarTitleText": "健身饮食记录",
     "navigationBarTextStyle": "black",
+    "navigationStyle": "custom",
     "backgroundColor": "#f5f7fa"
   },
   "tabBar": {
-    "color": "#9ca3af",
-    "selectedColor": "#3b82f6",
+    "color": "#8c97a8",
+    "selectedColor": "#4f6cff",
     "backgroundColor": "#ffffff",
     "borderStyle": "white",
     "list": [

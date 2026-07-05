@@ -417,7 +417,7 @@ Page({
     wx.showLoading({ title: '处理中' })
     post(`/api/training/sessions/${sessionId}/finish`, {
       finish_type: finishType,
-      end_time: time.formatDateTime(new Date())
+      end_time: time.formatDateTimeWithOffset(new Date())
     }).then(() => {
       wx.hideLoading()
       wx.showToast({ title: finishType === 'abandoned' ? '已放弃' : '已保存', icon: 'success' })
@@ -473,7 +473,7 @@ Page({
       return
     }
 
-    const recordTime = time.formatDateTime(new Date(`${this.data.weightDate}T${this.data.weightTime}:00`))
+    const recordTime = time.combineDateTimeWithOffset(this.data.weightDate, this.data.weightTime)
     if (new Date(recordTime) > new Date()) {
       wx.showToast({ title: '不能记录未来时间', icon: 'none' })
       return

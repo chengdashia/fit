@@ -1,141 +1,160 @@
+/* =============================================================
+   Training Session · Liquid Glass
+   ============================================================= */
 .session-header {
   margin: 36rpx 0 28rpx;
 }
-
 .session-kicker,
 .session-name {
   display: block;
 }
-
 .session-kicker {
   font-size: 56rpx;
   font-weight: 800;
-  color: var(--text-main);
+  color: var(--text-primary);
   line-height: 1.08;
+  letter-spacing: -1rpx;
+  background: var(--grad-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
-
 .session-name {
   margin-top: 12rpx;
-  font-size: 32rpx;
-  color: var(--text-main);
+  font-size: 30rpx;
+  color: var(--text-secondary);
+  font-weight: 600;
 }
 
 .session-progress {
   display: flex;
   align-items: center;
   gap: 18rpx;
-  margin-top: 26rpx;
+  margin-top: 28rpx;
 }
-
 .progress-bar {
   flex: 1;
   height: 14rpx;
   border-radius: 999rpx;
-  background: rgba(47,111,246,0.12);
+  background: rgba(79, 140, 255, 0.12);
   overflow: hidden;
+  position: relative;
 }
-
 .progress-fill {
   height: 100%;
   border-radius: 999rpx;
-  background: var(--primary-gradient);
-  transition: width 0.3s ease;
+  background: var(--grad-primary);
+  transition: width .45s cubic-bezier(.2,.8,.2,1);
+  box-shadow: inset 0 1rpx 0 rgba(255,255,255,0.4);
+  position: relative;
 }
-
 .progress-text {
-  min-width: 92rpx;
+  min-width: 100rpx;
   text-align: right;
   color: var(--text-secondary);
   font-size: 26rpx;
+  font-weight: 700;
 }
 
+/* —— Current card (大字号 + 玻璃 + 渐变) —— */
 .current-card {
   position: relative;
   overflow: hidden;
-  padding: 42rpx 34rpx 34rpx;
+  padding: 48rpx 36rpx 40rpx;
   border-radius: var(--radius-xl);
+  background: var(--glass-fill-strong);
+  border: 1rpx solid var(--glass-border);
+  box-shadow: var(--shadow-glass);
+  backdrop-filter: var(--blur-glass);
+  -webkit-backdrop-filter: var(--blur-glass);
 }
+.current-card::before {
+  content: '';
+  position: absolute; inset: 0 0 50% 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.55), transparent);
+  opacity: 0.55;
+  pointer-events: none;
+}
+.current-card::after {
+  content: '';
+  position: absolute;
+  right: -100rpx; top: -80rpx;
+  width: 280rpx; height: 280rpx;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(139, 109, 255, 0.16) 0%, transparent 70%);
+  pointer-events: none;
+}
+.current-card > view,
+.current-card > text { position: relative; z-index: 1; }
 
 .unit-badge {
   display: inline-flex;
-  height: 52rpx;
+  height: 56rpx;
   align-items: center;
-  padding: 0 22rpx;
+  padding: 0 24rpx;
   border-radius: 999rpx;
-  color: var(--primary);
+  color: var(--accent-blue);
   background: var(--primary-light);
   font-size: 24rpx;
-  font-weight: 700;
-  margin-bottom: 24rpx;
+  font-weight: 800;
+  margin-bottom: 26rpx;
+  border: 1rpx solid rgba(79, 140, 255, 0.14);
 }
-
 .exercise-name {
   display: block;
-  max-width: 500rpx;
-  font-size: 56rpx;
+  max-width: 540rpx;
+  font-size: 64rpx;
   font-weight: 800;
-  color: var(--text-main);
-  line-height: 1.18;
-  margin-bottom: 16rpx;
+  color: var(--text-primary);
+  line-height: 1.15;
+  margin-bottom: 18rpx;
+  letter-spacing: -1rpx;
 }
-
-.set-info {
-  margin-bottom: 24rpx;
-}
-
+.set-info { margin-bottom: 28rpx; }
 .set-info-main {
   display: block;
   font-size: 30rpx;
-  font-weight: 700;
-  color: var(--primary);
+  font-weight: 800;
+  color: var(--accent-blue);
 }
-
 .set-info-rest {
   display: block;
-  margin-top: 8rpx;
+  margin-top: 10rpx;
   font-size: 26rpx;
   color: var(--text-secondary);
 }
 
 .outline-card {
-  margin-top: 24rpx;
-  padding: 28rpx 32rpx;
+  margin-top: 26rpx;
+  padding: 32rpx;
+  position: relative;
+  overflow: hidden;
 }
-
 .outline-title {
   display: block;
   font-size: 28rpx;
-  font-weight: 700;
-  color: var(--text-main);
-  margin-bottom: 16rpx;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 18rpx;
 }
-
 .outline-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16rpx 0;
-  border-bottom: 1rpx solid var(--border);
+  padding: 18rpx 0;
+  border-bottom: 1rpx solid rgba(111, 136, 181, 0.10);
 }
-
-.outline-row:last-child {
-  border-bottom: none;
-}
-
+.outline-row:last-child { border-bottom: none; }
 .outline-row.current .outline-name {
-  color: var(--primary);
-  font-weight: 700;
+  color: var(--accent-blue);
+  font-weight: 800;
 }
-
-.outline-row.done .outline-meta {
-  color: #10b981;
-}
-
+.outline-row.done .outline-meta { color: var(--success); }
 .outline-name {
   font-size: 28rpx;
-  color: var(--text-main);
+  color: var(--text-primary);
+  font-weight: 600;
 }
-
 .outline-meta {
   font-size: 24rpx;
   color: var(--text-secondary);
@@ -149,151 +168,197 @@
   height: 112rpx;
   border-radius: 50%;
   background:
-    radial-gradient(circle at 38% 42%, rgba(47,111,246,0.62) 0 18rpx, transparent 20rpx),
-    radial-gradient(circle at 62% 42%, rgba(124,92,255,0.58) 0 18rpx, transparent 20rpx),
+    radial-gradient(circle at 38% 42%, rgba(79, 140, 255, 0.62) 0 18rpx, transparent 20rpx),
+    radial-gradient(circle at 62% 42%, rgba(139, 109, 255, 0.58) 0 18rpx, transparent 20rpx),
     linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.18));
   opacity: 0.72;
+  filter: blur(2rpx);
 }
 
+/* —— Target tags —— */
 .target-row {
   display: flex;
   flex-wrap: wrap;
   gap: 18rpx;
-  margin-bottom: 18rpx;
+  margin-bottom: 20rpx;
 }
-
 .target-tag {
   display: inline-flex;
   align-items: center;
-  min-height: 54rpx;
+  min-height: 56rpx;
   padding: 0 22rpx;
   border-radius: 999rpx;
-  background: rgba(255,255,255,0.68);
-  border: 1rpx solid var(--border);
+  background: var(--glass-fill-soft);
+  border: 1rpx solid var(--glass-border);
   color: var(--text-secondary);
   font-size: 26rpx;
+  font-weight: 700;
+  backdrop-filter: var(--blur-glass-md);
+  -webkit-backdrop-filter: var(--blur-glass-md);
 }
 
+/* —— Inputs —— */
 .input-section {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 22rpx;
   margin-top: 36rpx;
 }
-
 .input-block {
-  background: rgba(255,255,255,0.58);
-  border: 1rpx solid var(--border);
+  background: var(--glass-fill-soft);
+  border: 1rpx solid var(--glass-border);
   border-radius: var(--radius-lg);
   padding: 28rpx 22rpx;
+  backdrop-filter: var(--blur-glass-md);
+  -webkit-backdrop-filter: var(--blur-glass-md);
+  position: relative;
+  overflow: hidden;
 }
-
+.input-block::before {
+  content: '';
+  position: absolute; inset: 0 0 60% 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.40), transparent);
+  pointer-events: none;
+}
+.input-block > view,
+.input-block > text { position: relative; z-index: 1; }
 .input-label {
   display: block;
-  font-size: 26rpx;
+  font-size: 24rpx;
   color: var(--text-secondary);
   margin-bottom: 18rpx;
+  font-weight: 600;
 }
-
 .input-wrap {
   display: flex;
   align-items: baseline;
   justify-content: center;
 }
-
 .main-input {
-  width: 132rpx;
-  min-height: 74rpx;
-  color: var(--text-main);
-  font-size: 56rpx;
+  width: 140rpx;
+  min-height: 80rpx;
+  color: var(--text-primary);
+  font-size: 60rpx;
   font-weight: 800;
   text-align: center;
+  background: transparent;
 }
-
 .input-unit {
   margin-left: 8rpx;
   color: var(--text-secondary);
   font-size: 28rpx;
+  font-weight: 600;
 }
 
 .next-card,
 .done-card {
   border-radius: var(--radius-xl);
+  position: relative;
+  overflow: hidden;
 }
+.next-card::before,
+.done-card::before {
+  content: '';
+  position: absolute; inset: 0 0 60% 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.45), transparent);
+  pointer-events: none;
+}
+.next-card > view,
+.next-card > text,
+.done-card > view,
+.done-card > text { position: relative; z-index: 1; }
 
 .next-label {
   display: block;
-  color: var(--text-light);
+  color: var(--text-tertiary);
   font-size: 24rpx;
-  margin-bottom: 10rpx;
+  margin-bottom: 12rpx;
 }
-
 .next-text {
-  color: var(--text-main);
+  color: var(--text-primary);
   font-size: 30rpx;
+  font-weight: 600;
   line-height: 1.5;
 }
 
 .done-card {
   text-align: center;
-  padding: 88rpx 34rpx;
+  padding: 100rpx 36rpx;
 }
-
 .done-icon {
-  font-size: 80rpx;
-  margin-bottom: 24rpx;
+  font-size: 88rpx;
+  margin-bottom: 28rpx;
+  filter: drop-shadow(0 14rpx 28rpx rgba(79, 140, 255, 0.20));
 }
-
 .done-title,
-.done-desc {
-  display: block;
-}
-
+.done-desc { display: block; }
 .done-title {
-  font-size: 40rpx;
+  font-size: 44rpx;
   font-weight: 800;
+  letter-spacing: -0.5rpx;
 }
-
 .done-desc {
-  margin-top: 12rpx;
+  margin-top: 14rpx;
   color: var(--text-secondary);
   font-size: 28rpx;
 }
 
+/* —— Action dock (sticky 玻璃) —— */
 .action-grid {
   display: grid;
   grid-template-columns: 1.2fr 0.8fr;
   gap: 18rpx;
   margin-top: 28rpx;
-  padding-bottom: 160rpx;
+  padding: 24rpx 24rpx calc(40rpx + env(safe-area-inset-bottom));
+  background: var(--glass-fill-strong);
+  border: 1rpx solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  backdrop-filter: var(--blur-glass-lg);
+  -webkit-backdrop-filter: var(--blur-glass-lg);
+  box-shadow: var(--shadow-glass);
+  position: sticky;
+  bottom: 16rpx;
 }
-
-.action-grid.single {
-  grid-template-columns: 1fr;
+.action-grid::before {
+  content: '';
+  position: absolute; inset: 0 0 60% 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.50), transparent);
+  pointer-events: none;
+  border-radius: inherit;
 }
+.action-grid > view,
+.action-grid > text,
+.action-grid > button { position: relative; z-index: 1; }
+.action-grid.single { grid-template-columns: 1fr; }
 
 .action-btn {
-  min-height: 88rpx;
-  line-height: 88rpx;
+  min-height: 92rpx;
+  line-height: 92rpx;
   border-radius: 999rpx;
   text-align: center;
   font-size: 30rpx;
   font-weight: 700;
-  border: 1rpx solid var(--border);
+  border: 1rpx solid var(--glass-border);
+  transition: transform .18s cubic-bezier(.2,.8,.2,1), box-shadow .18s;
+  position: relative;
+  overflow: hidden;
 }
-
+.action-btn:active {
+  transform: scale(0.97);
+  box-shadow: var(--shadow-pressed);
+}
 .action-btn.primary {
   color: #fff;
-  background: var(--primary-gradient);
-  box-shadow: var(--shadow-strong);
+  background: var(--grad-primary);
+  border-color: rgba(255,255,255,0.55);
+  box-shadow: 0 14rpx 36rpx rgba(79, 108, 255, 0.32);
 }
-
 .action-btn.secondary {
-  color: var(--text-main);
-  background: rgba(255,255,255,0.66);
+  color: var(--text-primary);
+  background: var(--glass-fill-strong);
 }
-
 .action-btn.danger {
   color: var(--danger);
-  background: rgba(255,255,255,0.66);
+  background: rgba(239, 79, 90, 0.10);
+  border-color: rgba(239, 79, 90, 0.16);
 }

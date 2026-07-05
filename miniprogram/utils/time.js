@@ -35,11 +35,29 @@ function mealTypeName(type) {
   return map[type] || type
 }
 
+// ISO8601 + 显式时区偏移（兼容 Python datetime.fromisoformat 与 MySQL 读取）
+// 例如 "2026-07-05T18:30:00+08:00"，避免后端按 naive UTC 解析导致日期跨天
+function formatDateTimeWithOffset(date) {
+  const d = date instanceof Date ? date : new Date(date)
+  const off = -d.getTimezoneOffset()
+  const sign = off >= 0 ? '+' : '-'
+  const pad = (n) => String(Math.abs(n)).padStart(2, '0')
+  return `${formatDate(d)}T${formatTime(d)}:00${sign}${pad(off / 60 | 0)}:${pad(off % 60)}`
+}
+
+// 用 picker 拼出的"本地无时区"字符串（date T time:00）转 ISO 8601 + offset
+// 入参示例：date="2026-07-05", time="18:30" => "2026-07-05T18:30:00+08:00"
+function combineDateTimeWithOffset(date, time) {
+  return formatDateTimeWithOffset(new Date(`${date}T${time}:00`))
+}
+
 module.exports = {
   formatDate,
   formatDateTime,
   formatTime,
   getWeekDay,
   getDefaultMealType,
-  mealTypeName
+  mealTypeName,
+  formatDateTimeWithOffset,
+  combineDateTimeWithOffset
 }

@@ -175,7 +175,7 @@ Page({
     wx.showLoading({ title: '结束中' })
     api.post(`/api/training/sessions/${sessionId}/finish`, {
       finish_type: finishType,
-      end_time: require('../../utils/time').formatDateTime(new Date())
+      end_time: require('../../utils/time').formatDateTimeWithOffset(new Date())
     })
       .then(() => {
         wx.hideLoading()

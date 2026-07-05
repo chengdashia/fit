@@ -77,11 +77,11 @@ def _get_training_summary(db: Session, user_id: str, query_date: date) -> dict:
 
     # PRD: global in_progress/resting takes priority over today's completed status
     if unfinished_session_id:
-        today_status_value = "in_progress"
+        today_status_value = SessionStatus.in_progress.value
     else:
         priority = {
-            SessionStatus.completed: 3,
-            SessionStatus.interrupted_saved: 2,
+            SessionStatus.completed.value: 3,
+            SessionStatus.interrupted_saved.value: 2,
         }
         today_status_value = "not_started"
         max_priority = 0

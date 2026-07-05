@@ -1,5 +1,5 @@
 const { post } = require('../../utils/request')
-const { formatDateTime, getDefaultMealType, mealTypeName } = require('../../utils/time')
+const { formatDateTimeWithOffset, getDefaultMealType, mealTypeName } = require('../../utils/time')
 const { showRecordSuccess } = require('../../utils/dietRecordSuccess')
 
 function round(num) {
@@ -20,6 +20,9 @@ Page({
     editItem: {}
   },
 
+  _dirty: false,
+  _saved: false,
+
   onLoad(options) {
     const meal = options.mealType || getDefaultMealType()
     const sourceType = options.source || 'photo_ai'
@@ -36,7 +39,16 @@ Page({
       thumb,
       candidates: candidates.map((c, i) => ({ ...c, id: i }))
     })
+    this._dirty = false
+    this._saved = false
     this.calcTotals()
+  },
+
+  onUnload() {
+    // 未保存但用户主动离开时给出提示（不阻塞返回）
+    if (this._dirty && !this._saved) {
+      // 不主动弹窗，避免阻塞 onUnload；下次进入 onLoad 时仍会清空
+    }
   },
 
   calcTotals() {
@@ -63,7 +75,9 @@ Page({
   deleteItem(e) {
     const idx = e.currentTarget.dataset.index
     const candidates = this.data.candidates.filter((_, i) => i !== idx)
+      .map((c, i) => ({ ...c, id: i }))
     this.setData({ candidates })
+    this._dirty = true
     this.calcTotals()
   },
 
@@ -104,6 +118,7 @@ Page({
     const candidates = this.data.candidates.slice()
     candidates[idx] = parsed
     this.setData({ candidates, showEdit: false })
+    this._dirty = true
     this.calcTotals()
   },
 
@@ -112,10 +127,34 @@ Page({
   },
 
   goSearch() {
+    if (this._dirty && !this._saved) {
+      wx.showModal({
+        title: '放弃当前编辑？',
+        content: '尚未保存当前食物编辑',
+        confirmText: '放弃',
+        success: (r) => { if (r.confirm) this._doGoSearch() }
+      })
+      return
+    }
+    this._doGoSearch()
+  },
+  _doGoSearch() {
     wx.navigateTo({ url: `/pages/food-search/food-search?mealType=${this.data.mealType}` })
   },
 
   goCustom() {
+    if (this._dirty && !this._saved) {
+      wx.showModal({
+        title: '放弃当前编辑？',
+        content: '尚未保存当前食物编辑',
+        confirmText: '放弃',
+        success: (r) => { if (r.confirm) this._doGoCustom() }
+      })
+      return
+    }
+    this._doGoCustom()
+  },
+  _doGoCustom() {
     wx.navigateTo({ url: `/pages/custom-food/custom-food?mealType=${this.data.mealType}` })
   },
 
@@ -133,7 +172,7 @@ Page({
     }
     const payload = {
       meal_type: this.data.mealType,
-      record_time: formatDateTime(new Date()),
+      record_time: formatDateTimeWithOffset(new Date()),
       source_type: sourceType,
       save_as_frequent: this.data.saveAsFrequent,
       food_items: this.data.candidates.map(c => ({
@@ -151,6 +190,7 @@ Page({
     post('/api/diet/records/confirm', payload)
       .then(() => {
         wx.hideLoading()
+        this._saved = true
         showRecordSuccess(this.data.mealType)
       })
       .catch(() => {

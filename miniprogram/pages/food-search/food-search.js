@@ -1,5 +1,5 @@
 const { get, post } = require('../../utils/request')
-const { formatDateTime, getDefaultMealType, mealTypeName } = require('../../utils/time')
+const { formatDateTimeWithOffset, getDefaultMealType, mealTypeName } = require('../../utils/time')
 const { showRecordSuccess } = require('../../utils/dietRecordSuccess')
 
 function round(num) {
@@ -82,7 +82,7 @@ Page({
     }
     const payload = {
       meal_type: this.data.mealType,
-      record_time: formatDateTime(new Date()),
+      record_time: formatDateTimeWithOffset(new Date()),
       source_type: 'manual_search',
       save_as_frequent: false,
       food_items: [foodItem]

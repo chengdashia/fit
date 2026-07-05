@@ -64,14 +64,29 @@ def has_active_goal(db: Session, user_id: str) -> bool:
 
 def set_active_goal(db: Session, user_id: str, data: dict) -> UserGoal:
     goal = get_active_goal(db, user_id)
+    is_new = goal is None
     if not goal:
         goal = UserGoal(user_id=user_id)
         db.add(goal)
-    goal.goal_stage = data["goal_stage"]
-    goal.calorie_target = data["calorie_target"]
-    goal.protein_target = data["protein_target"]
+    if "goal_stage" in data and data["goal_stage"] is not None:
+        goal.goal_stage = data["goal_stage"]
+    if "calorie_target" in data and data["calorie_target"] is not None:
+        goal.calorie_target = data["calorie_target"]
+    if "protein_target" in data and data["protein_target"] is not None:
+        goal.protein_target = data["protein_target"]
     if "target_weight_kg" in data and data["target_weight_kg"] is not None:
         goal.target_weight_kg = data["target_weight_kg"]
+    if is_new:
+        missing = []
+        if goal.goal_stage is None:
+            missing.append("goal_stage")
+        if goal.calorie_target is None:
+            missing.append("calorie_target")
+        if goal.protein_target is None:
+            missing.append("protein_target")
+        if missing:
+            from app.core.exceptions import AppException
+            raise AppException(40003, "参数错误", {"missing": missing})
     goal.goal_status = GoalStatus.active
     db.commit()
     db.refresh(goal)

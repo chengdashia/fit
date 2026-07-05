@@ -1,5 +1,5 @@
 const { get, uploadFile } = require('../../utils/request')
-const { formatDateTime, getDefaultMealType, mealTypeName, formatDate } = require('../../utils/time')
+const { formatDateTimeWithOffset, getDefaultMealType, mealTypeName, formatDate } = require('../../utils/time')
 
 const MEAL_TYPES = ['breakfast', 'lunch', 'dinner', 'snack']
 const OPTIONS = [
@@ -88,7 +88,7 @@ Page({
 
   uploadAndGo(tempFile) {
     const meal = this.data.selectedMealType
-    const time = formatDateTime(new Date())
+    const time = formatDateTimeWithOffset(new Date())
     this.setData({ uploading: true })
     wx.showLoading({ title: '识别中' })
     uploadFile('/api/diet/recognize', tempFile, {
@@ -103,22 +103,12 @@ Page({
           url: `/pages/diet-result/diet-result?mealType=${meal}&thumb=${encodeURIComponent(tempFile)}&candidates=${candidates}`
         })
       })
-      .catch(() => {
+      .catch((err) => {
         wx.hideLoading()
         this.setData({ uploading: false })
-        wx.showActionSheet({
-          itemList: ['重新拍照', '手动搜索', '自定义录入'],
-          success: (res) => {
-            const meal = this.data.selectedMealType
-            if (res.tapIndex === 0) {
-              this.takePhoto()
-            } else if (res.tapIndex === 1) {
-              wx.navigateTo({ url: `/pages/food-search/food-search?mealType=${meal}` })
-            } else if (res.tapIndex === 2) {
-              wx.navigateTo({ url: `/pages/custom-food/custom-food?mealType=${meal}` })
-            }
-          }
-        })
+        // 不再连续弹 actionSheet，让用户自己选择下一步
+        const msg = (err && err.message) ? err.message : '识别失败，请重试'
+        wx.showToast({ title: msg, icon: 'none', duration: 1800 })
       })
   },
 

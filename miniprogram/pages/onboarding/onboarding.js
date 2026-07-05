@@ -65,13 +65,13 @@ Page({
     wx.showLoading({ title: '加载中' })
     Promise.all([api.get('/api/user/profile'), api.get('/api/user/goal')])
       .then(([profile, goal]) => {
-        const stage = goal && goal.goal_stage ? goal.goal_stage : 'fat_loss'
+        const stage = goal && goal.goal_stage ? goal.goal_stage : ''
         const currentYear = new Date().getFullYear()
         const startYear = currentYear - 100
         const birthYear = profile.birth_year || this.data.form.birth_year
         this.setData({
           originalGoalStage: stage,
-          'form.goal_stage': stage,
+          'form.goal_stage': stage || 'fat_loss',
           'form.current_weight_kg': profile.current_weight_kg ? String(profile.current_weight_kg) : '',
           'form.height_cm': profile.height_cm ? String(profile.height_cm) : '',
           'form.gender': profile.gender || 'male',

@@ -3,6 +3,8 @@ const api = require('../../utils/request')
 
 Page({
   onLoad() {
+    // 强制清理：避免 request.js 把 _authInvalidated 标志清除后，
+    // 老 token 仍在 storage 中让 login.js 误判为已登录
     const token = wx.getStorageSync('token')
     if (token) {
       this.checkExistingLogin()

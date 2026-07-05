@@ -219,7 +219,7 @@ Page({
       fat: parseFloat(f.fat) || 0,
       data_source: f.data_source || 'user_custom'
     }))
-    const recordTime = formatDateTime(new Date(`${this.data.editDate}T${this.data.editTime}:00`))
+    const recordTime = time.combineDateTimeWithOffset(this.data.editDate, this.data.editTime)
     wx.showLoading({ title: '保存中' })
     put(`/api/diet/records/${record.id}`, {
       meal_type: this.data.editMealType,

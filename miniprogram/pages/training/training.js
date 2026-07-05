@@ -161,7 +161,7 @@ Page({
         }
         return api.post('/api/training/sessions/start', {
           template_id: id,
-          start_time: time.formatDateTime(new Date())
+          start_time: time.formatDateTimeWithOffset(new Date())
         })
       })
       .then(data => {
@@ -178,7 +178,7 @@ Page({
     wx.showLoading({ title: '处理中' })
     api.post(`/api/training/sessions/${sessionId}/finish`, {
       finish_type: finishType,
-      end_time: time.formatDateTime(new Date())
+      end_time: time.formatDateTimeWithOffset(new Date())
     }).then(() => {
       wx.hideLoading()
       wx.showToast({ title: finishType === 'abandoned' ? '已放弃' : '已保存', icon: 'success' })

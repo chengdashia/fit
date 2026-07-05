@@ -310,7 +310,7 @@ Page({
       wx.showToast({ title: '请输入20-300之间的体重', icon: 'none' })
       return
     }
-    const recordTime = time.formatDateTime(new Date(`${form.date}T${form.time}:00`))
+    const recordTime = time.combineDateTimeWithOffset(form.date, form.time)
     if (new Date(recordTime) > new Date()) {
       wx.showToast({ title: '不能记录未来时间', icon: 'none' })
       return

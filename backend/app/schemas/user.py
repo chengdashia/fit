@@ -28,9 +28,9 @@ class GoalResponse(BaseModel):
 
 
 class GoalUpdateRequest(BaseModel):
-    goal_stage: str
-    calorie_target: int
-    protein_target: int
+    goal_stage: Optional[str] = None
+    calorie_target: Optional[int] = None
+    protein_target: Optional[int] = None
     target_weight_kg: Optional[float] = None
     sync_weight_record: Optional[bool] = Field(default=False)
     current_weight_kg: Optional[float] = None

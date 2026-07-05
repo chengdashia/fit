@@ -26,7 +26,15 @@ _FINISHED_ITEM_STATUSES = {SessionItemStatus.completed.value, SessionItemStatus.
 
 
 def _now() -> datetime:
-    return datetime.now(timezone.utc)
+    # Naive UTC to match MySQL DATETIME column reads (DB strips tz info).
+    return datetime.utcnow()
+
+
+def _to_naive_utc(dt: datetime) -> datetime:
+    """Normalize any datetime to naive UTC, matching MySQL DATETIME reads."""
+    if dt.tzinfo is not None:
+        dt = dt.astimezone(timezone.utc)
+    return dt.replace(tzinfo=None)
 
 
 def _template_or_404(db: Session, template_id: str, user_id: str) -> TrainingTemplate:
@@ -320,6 +328,7 @@ def start_session(
     if unfinished:
         raise AppException(42001, "存在未完成的训练")
 
+    start_time = _to_naive_utc(start_time)
     session = TrainingSession(
         user_id=user_id,
         template_id=template.id,
@@ -346,10 +355,11 @@ def start_session(
 
     db.flush()
 
-    unit_map = {t_unit.id: s_unit for t_unit, s_unit in zip(sorted(template.units, key=lambda u: (u.sort_order, u.created_at)), session_units)}
+    sorted_units = sorted(template.units, key=lambda u: (u.sort_order, u.created_at))
+    unit_map = {t_unit.id: s_unit for t_unit, s_unit in zip(sorted_units, session_units)}
 
     created_items: list[TrainingSessionItem] = []
-    for t_unit in template.units:
+    for t_unit in sorted_units:
         s_unit = unit_map[t_unit.id]
         config = t_unit.config_json or {}
         unit_type = t_unit.unit_type
@@ -479,6 +489,7 @@ def complete_session_item(
     session = _session_or_404(db, session_id, user_id)
     item = _item_or_404(db, item_id, session_id, user_id)
 
+    completed_at = _to_naive_utc(completed_at)
     item.status = SessionItemStatus.completed.value
     item.actual_weight = actual_weight
     item.actual_reps = actual_reps
@@ -527,8 +538,8 @@ def skip_rest(
     rest = _rest_or_404(db, rest_id, session_id, user_id)
 
     now = _now()
-    rest.rest_actual_end_time = now
-    rest.actual_rest_seconds = int((now - rest.rest_start_time).total_seconds())
+    rest.rest_actual_end_time = max(rest.rest_start_time, now)
+    rest.actual_rest_seconds = max(0, int((rest.rest_actual_end_time - rest.rest_start_time).total_seconds()))
     rest.end_type = RestEndType.skipped.value
 
     session.session_status = SessionStatus.in_progress.value
@@ -557,8 +568,8 @@ def complete_rest(
     rest = _rest_or_404(db, rest_id, session_id, user_id)
 
     now = _now()
-    rest.rest_actual_end_time = now
-    rest.actual_rest_seconds = int((now - rest.rest_start_time).total_seconds())
+    rest.rest_actual_end_time = max(rest.rest_start_time, now)
+    rest.actual_rest_seconds = max(0, int((rest.rest_actual_end_time - rest.rest_start_time).total_seconds()))
     rest.end_type = RestEndType.natural_end.value
     session.session_status = SessionStatus.in_progress.value
 
@@ -647,11 +658,17 @@ def finish_session(
 ) -> TrainingSession:
     session = get_session_with_units_items(db, session_id, user_id)
 
+    end_time = _to_naive_utc(end_time)
+
     now = _now()
+    rest_close_time = min(now, end_time) if end_time else now
     for rest in session.rest_records:
         if rest.rest_actual_end_time is None:
-            rest.rest_actual_end_time = now
-            rest.actual_rest_seconds = int((now - rest.rest_start_time).total_seconds())
+            # 防服务端时钟漂移：保证 close_time >= start_time
+            close_at = max(rest.rest_start_time, rest_close_time)
+            rest.rest_actual_end_time = close_at
+            delta = (close_at - rest.rest_start_time).total_seconds()
+            rest.actual_rest_seconds = max(0, int(delta))
             rest.end_type = RestEndType.skipped.value
 
     session.session_status = finish_type.value

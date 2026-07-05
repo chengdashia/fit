@@ -232,7 +232,7 @@ Page({
     api.post(`/api/training/sessions/${sessionId}/items/${currentItem.id}/complete`, {
       actual_weight: weight,
       actual_reps: reps,
-      completed_at: time.formatDateTime(new Date())
+      completed_at: time.formatDateTimeWithOffset(new Date())
     })
       .then(next => {
         wx.hideLoading()
@@ -309,7 +309,7 @@ Page({
     wx.showLoading({ title: '结束中' })
     api.post(`/api/training/sessions/${sessionId}/finish`, {
       finish_type: finishType,
-      end_time: time.formatDateTime(new Date())
+      end_time: time.formatDateTimeWithOffset(new Date())
     })
       .then(() => {
         wx.hideLoading()
