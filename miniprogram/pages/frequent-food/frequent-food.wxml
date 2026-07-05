@@ -1,0 +1,49 @@
+<wxs module="meal" src="../../utils/meal.wxs"></wxs>
+<view class="container safe-bottom">
+  <view class="page-title">{{meal.name(mealType)}} · 常吃食物</view>
+  <view class="page-subtitle">点击食物快速记录，支持调整本次重量</view>
+
+  <view wx:if="{{loading}}" class="empty-state card">加载中…</view>
+
+  <block wx:elif="{{foods.length}}">
+    <view class="food-grid">
+      <view
+        wx:for="{{foods}}"
+        wx:key="id"
+        class="food-item card"
+        data-item="{{item}}"
+        bindtap="selectFood"
+      >
+        <view class="food-item-top">
+          <view class="food-name">{{item.food_name}}</view>
+          <view class="food-delete" data-id="{{item.id}}" catchtap="deleteFood">删除</view>
+        </view>
+        <view class="food-portion" wx:if="{{item.default_portion_desc}}">{{item.default_portion_desc}}</view>
+        <view class="food-cal">{{item.calorie}} kcal</view>
+        <view class="food-macro">{{item.default_weight_g}}g · 蛋{{item.protein}}g</view>
+      </view>
+    </view>
+  </block>
+
+  <view wx:else class="empty-state card">
+    暂无常吃食物，可从识别结果或自定义食物中保存。
+  </view>
+</view>
+
+<view class="modal-mask" wx:if="{{showModal}}" bindtap="closeModal"></view>
+<view class="modal" wx:if="{{showModal}}">
+  <view class="modal-title">调整本次重量</view>
+  <view class="selected-name">{{selected.food_name}}</view>
+  <view class="modal-body">
+    <view class="form-row">
+      <text class="form-label">重量</text>
+      <input class="form-input" value="{{weightG}}" bindinput="onWeightInput" type="digit" placeholder="克" />
+      <text class="form-unit">g</text>
+    </view>
+    <view class="hint">默认 {{selected.default_weight_g}}g {{selected.calorie}} kcal，按重量比例换算</view>
+  </view>
+  <view class="modal-footer">
+    <button class="btn-secondary" bindtap="closeModal">取消</button>
+    <button class="btn-primary" bindtap="confirm">确认</button>
+  </view>
+</view>

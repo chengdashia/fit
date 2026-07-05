@@ -1,0 +1,96 @@
+<view class="container safe-bottom">
+  <view class="page-hero">
+    <view>
+      <view class="hero-title">训练</view>
+      <view class="hero-subtitle">按分化计划训练，每组完成后自动进入休息</view>
+    </view>
+    <view class="history-dot" bindtap="goHistory">历史</view>
+  </view>
+
+  <view class="split-card card" wx:if="{{todayPlan}}">
+    <view class="split-head">
+      <view>
+        <view class="split-kicker">今日训练</view>
+        <view class="split-title">{{todayPlan.label}} · {{todayPlan.templateName}}</view>
+        <view class="split-desc">5 个动作 · 每组完成后休息 3 分钟</view>
+      </view>
+      <view class="btn-primary split-start" data-id="{{todayPlan.templateId}}" bindtap="startTraining">开始</view>
+    </view>
+    <view class="split-days">
+      <view
+        wx:for="{{splitDays}}"
+        wx:key="key"
+        class="split-day {{item.isToday ? 'today' : ''}}"
+      >
+        <text class="split-day-label">{{item.label}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="split-setup card" wx:if="{{!hasSplitProgram && !loading}}">
+    <view class="split-setup-title">三分化训练计划</view>
+    <view class="split-setup-desc">第1天练胸、第2天练背、第3天练肩。每个动作 4 组 × 10 次，组间休息 3 分钟。</view>
+    <view class="btn-primary split-setup-btn" bindtap="initSplitProgram">创建三分化计划</view>
+  </view>
+
+  <view class="section-label">训练模板</view>
+
+  <scroll-view scroll-x class="filter-scroll" enhanced show-scrollbar="{{false}}">
+    <view class="filter-list">
+      <view
+        wx:for="{{filters}}"
+        wx:key="value"
+        class="filter-chip {{activeFilter === item.value ? 'active' : ''}}"
+        data-filter="{{item.value}}"
+        bindtap="switchFilter"
+      >{{item.label}}</view>
+    </view>
+  </scroll-view>
+
+  <view class="template-list" wx:if="{{!loading || templates.length > 0}}">
+    <view class="template-card" wx:for="{{templates}}" wx:key="id">
+      <view class="template-header">
+        <view class="template-icon {{item.goal_type}}">
+          <text>{{item.goal_type === 'fat_loss' ? '↯' : item.goal_type === 'muscle_gain' ? '⌁' : '✦'}}</text>
+        </view>
+        <view class="template-main">
+          <view class="template-title-row">
+            <text class="template-name">{{item.template_name}}</text>
+            <text class="template-tag">{{item.goalText}}</text>
+          </view>
+          <text class="template-last">最近使用：{{item.lastUsedText}}</text>
+        </view>
+        <view class="more-btn">•••</view>
+      </view>
+      <view class="template-footer">
+        <view class="template-count">
+          <text class="count-label">动作数量</text>
+          <text class="count-value">{{item.unitCountText}}</text>
+        </view>
+        <view class="btn-primary start-btn" data-id="{{item.id}}" bindtap="startTraining">开始训练 ›</view>
+      </view>
+      <view class="template-actions">
+        <view class="action-icon" data-id="{{item.id}}" bindtap="goEdit">编辑</view>
+        <view class="action-icon" data-id="{{item.id}}" bindtap="copyTemplate">复制</view>
+        <view class="action-icon danger" data-id="{{item.id}}" bindtap="deleteTemplate">删除</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="utility-row" wx:if="{{allTemplates.length > 0}}">
+    <view class="utility-btn" bindtap="copyLastSession">复制上次训练</view>
+    <view class="utility-btn" bindtap="goHistory">训练历史</view>
+  </view>
+
+  <view class="empty-state card" wx:if="{{!loading && allTemplates.length === 0}}">
+    <view class="empty-icon">⌁</view>
+    <text class="empty-title">还没有训练模板</text>
+    <text class="empty-desc">创建一个模板后，就能开始记录训练</text>
+    <view class="btn-primary empty-create" bindtap="goCreate">创建模板</view>
+  </view>
+
+  <view class="create-fab" bindtap="goCreate">
+    <text class="create-plus">+</text>
+    <text>创建模板</text>
+  </view>
+</view>

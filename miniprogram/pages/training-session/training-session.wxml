@@ -1,0 +1,76 @@
+<view class="container safe-bottom" wx:if="{{session}}">
+  <view class="session-header">
+    <text class="session-kicker">训练中</text>
+    <text class="session-name">{{session.template_name_snapshot}}</text>
+    <view class="session-progress">
+      <view class="progress-bar">
+        <view class="progress-fill" style="width: {{progressPercent}}%;"></view>
+      </view>
+      <text class="progress-text">{{progressText}}</text>
+    </view>
+  </view>
+
+  <view class="card current-card" wx:if="{{currentItem}}">
+    <view class="unit-badge">{{currentUnit ? currentUnit.unit_name : '动作'}}</view>
+    <text class="exercise-name">{{currentItem.exercise_name}}</text>
+    <view class="set-info" wx:if="{{setInfoText}}">
+      <text class="set-info-main">{{setInfoText}}</text>
+      <text class="set-info-rest" wx:if="{{restInfoText}}">{{restInfoText}}</text>
+    </view>
+    <view class="target-row" wx:if="{{currentItem.round_index > 0 || currentItem.segment_index > 0}}">
+      <text class="target-tag" wx:if="{{currentItem.round_index > 0}}">第 {{currentItem.round_index}} 轮</text>
+      <text class="target-tag" wx:if="{{currentItem.segment_index > 0}}">第 {{currentItem.segment_index}} 段</text>
+    </view>
+    <view class="target-row">
+      <text class="target-tag">目标重量 {{currentItem.target_weight}} kg</text>
+      <text class="target-tag">目标次数 {{currentItem.target_reps}} 次</text>
+    </view>
+
+    <view class="input-section">
+      <view class="input-block">
+        <text class="input-label">实际重量</text>
+        <view class="input-wrap">
+          <input class="main-input" type="digit" value="{{actualWeight}}" bindinput="onWeightInput" placeholder="0" />
+          <text class="input-unit">kg</text>
+        </view>
+      </view>
+      <view class="input-block">
+        <text class="input-label">实际次数</text>
+        <view class="input-wrap">
+          <input class="main-input" type="number" value="{{actualReps}}" bindinput="onRepsInput" placeholder="0" />
+          <text class="input-unit">次</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="card outline-card" wx:if="{{exerciseOutline.length > 0}}">
+    <text class="outline-title">今日动作</text>
+    <view wx:for="{{exerciseOutline}}" wx:key="name" class="outline-row {{item.isCurrent ? 'current' : ''}} {{item.isDone ? 'done' : ''}}">
+      <text class="outline-name">{{item.name}}</text>
+      <text class="outline-meta">{{item.meta}}</text>
+    </view>
+  </view>
+
+  <view class="card next-card" wx:if="{{currentItem && nextItem}}">
+    <text class="next-label">下一项</text>
+    <text class="next-text">{{nextItemText}}</text>
+  </view>
+
+  <view class="card done-card" wx:if="{{!currentItem}}">
+    <view class="done-icon">🎉</view>
+    <text class="done-title">训练已完成</text>
+    <text class="done-desc">所有动作组已全部完成</text>
+  </view>
+
+  <view class="action-grid fixed-actions" wx:if="{{currentItem}}">
+    <view class="action-btn primary" bindtap="completeSet">完成本组</view>
+    <view class="action-btn secondary" bindtap="skipSet">跳过</view>
+    <view class="action-btn secondary" bindtap="addTempSet" wx:if="{{currentUnit && currentUnit.unit_type === 'normal'}}">临时加组</view>
+    <view class="action-btn danger" bindtap="showFinishSheet">结束训练</view>
+  </view>
+
+  <view class="action-grid single" wx:if="{{!currentItem}}">
+    <view class="action-btn primary" bindtap="showFinishSheet">结束训练</view>
+  </view>
+</view>

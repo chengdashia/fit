@@ -1,0 +1,123 @@
+<wxs module="meal" src="../../utils/meal.wxs"></wxs>
+<view class="container safe-bottom">
+  <view class="page-title">{{meal.name(mealType)}}识别结果</view>
+
+  <view wx:if="{{thumb}}" class="thumb-card card">
+    <image class="thumb-img" src="{{thumb}}" mode="aspectFill" />
+  </view>
+
+  <view wx:if="{{!candidates.length}}" class="empty-state card">
+    <text>未识别到食物，请返回重新拍照或手动录入。</text>
+    <view class="empty-actions">
+      <view class="empty-btn" bindtap="goSearch">手动搜索</view>
+      <view class="empty-btn" bindtap="goCustom">自定义录入</view>
+    </view>
+  </view>
+
+  <block wx:else>
+    <view wx:for="{{candidates}}" wx:key="id" class="food-card card">
+      <view class="food-header">
+        <view class="food-title">
+          <text class="food-name">{{item.food_name}}</text>
+          <text wx:if="{{item.portion_desc}}" class="food-portion">{{item.portion_desc}}</text>
+        </view>
+        <view class="food-actions">
+          <view class="action-btn edit" data-index="{{index}}" bindtap="openEdit">编辑</view>
+          <view class="action-btn delete" data-index="{{index}}" bindtap="deleteItem">删除</view>
+        </view>
+      </view>
+      <view class="food-detail">
+        <view class="detail-cell">
+          <text class="detail-label">克数</text>
+          <text class="detail-value">{{item.weight_g}}g</text>
+        </view>
+        <view class="detail-cell">
+          <text class="detail-label">热量</text>
+          <text class="detail-value">{{item.calorie}}kcal</text>
+        </view>
+        <view class="detail-cell">
+          <text class="detail-label">蛋白质</text>
+          <text class="detail-value">{{item.protein}}g</text>
+        </view>
+        <view class="detail-cell">
+          <text class="detail-label">碳水</text>
+          <text class="detail-value">{{item.carb}}g</text>
+        </view>
+        <view class="detail-cell">
+          <text class="detail-label">脂肪</text>
+          <text class="detail-value">{{item.fat}}g</text>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <view class="total-card card">
+    <view class="total-title">营养素小计</view>
+    <view class="total-row">
+      <view class="total-cell">
+        <text class="total-num">{{totals.calorie}}</text>
+        <text class="total-unit">kcal</text>
+      </view>
+      <view class="total-cell">
+        <text class="total-num">{{totals.protein}}</text>
+        <text class="total-unit">g 蛋白质</text>
+      </view>
+      <view class="total-cell">
+        <text class="total-num">{{totals.carb}}</text>
+        <text class="total-unit">g 碳水</text>
+      </view>
+      <view class="total-cell">
+        <text class="total-num">{{totals.fat}}</text>
+        <text class="total-unit">g 脂肪</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="frequent-row">
+    <text>保存为常吃食物</text>
+    <switch checked="{{saveAsFrequent}}" bindchange="toggleSave" color="#3b82f6" />
+  </view>
+
+  <view class="bottom-area">
+    <button class="btn-primary confirm-btn" bindtap="confirm">确认记录</button>
+  </view>
+</view>
+
+<view class="modal-mask" wx:if="{{showEdit}}" bindtap="closeEdit"></view>
+<view class="modal" wx:if="{{showEdit}}">
+  <view class="modal-title">编辑食物</view>
+  <view class="modal-body">
+    <view class="form-row">
+      <text class="form-label">名称</text>
+      <input class="form-input" value="{{editItem.food_name}}" data-field="food_name" bindinput="onEditInput" placeholder="食物名称" />
+    </view>
+    <view class="form-row">
+      <text class="form-label">份量</text>
+      <input class="form-input" value="{{editItem.portion_desc}}" data-field="portion_desc" bindinput="onEditInput" placeholder="如 1碗" />
+    </view>
+    <view class="form-row">
+      <text class="form-label">克数</text>
+      <input class="form-input" value="{{editItem.weight_g}}" data-field="weight_g" bindinput="onEditInput" type="digit" placeholder="克数" />
+    </view>
+    <view class="form-row">
+      <text class="form-label">热量</text>
+      <input class="form-input" value="{{editItem.calorie}}" data-field="calorie" bindinput="onEditInput" type="digit" placeholder="kcal" />
+    </view>
+    <view class="form-row">
+      <text class="form-label">蛋白质</text>
+      <input class="form-input" value="{{editItem.protein}}" data-field="protein" bindinput="onEditInput" type="digit" placeholder="g" />
+    </view>
+    <view class="form-row">
+      <text class="form-label">碳水</text>
+      <input class="form-input" value="{{editItem.carb}}" data-field="carb" bindinput="onEditInput" type="digit" placeholder="g" />
+    </view>
+    <view class="form-row">
+      <text class="form-label">脂肪</text>
+      <input class="form-input" value="{{editItem.fat}}" data-field="fat" bindinput="onEditInput" type="digit" placeholder="g" />
+    </view>
+  </view>
+  <view class="modal-footer">
+    <button class="btn-secondary" bindtap="closeEdit">取消</button>
+    <button class="btn-primary" bindtap="saveEdit">保存</button>
+  </view>
+</view>

@@ -1,0 +1,72 @@
+<wxs module="meal" src="../../utils/meal.wxs"></wxs>
+<view class="container safe-bottom">
+  <view class="page-title">记录饮食</view>
+  <view class="page-subtitle">选择一餐，快速记录热量和营养</view>
+
+  <view class="meal-tabs">
+    <view
+      wx:for="{{mealTypes}}"
+      wx:key="*this"
+      class="tab {{selectedMealType === item ? 'active' : ''}}"
+      data-type="{{item}}"
+      bindtap="selectMeal"
+    >
+      {{meal.name(item)}}
+    </view>
+  </view>
+
+  <view class="summary-card">
+    <view class="summary-item">
+      <view class="summary-label">今日已摄入</view>
+      <view class="summary-value">{{summary.total_calorie}}<text class="summary-unit">kcal</text></view>
+      <view class="summary-sub">推荐 {{targets.calorie_target}} kcal</view>
+    </view>
+    <view class="summary-divider"></view>
+    <view class="summary-item">
+      <view class="summary-label">蛋白质</view>
+      <view class="summary-value">{{summary.total_protein}}<text class="summary-unit">g</text></view>
+      <view class="summary-sub">推荐 {{targets.protein_target}} g</view>
+    </view>
+  </view>
+
+  <view class="options-grid">
+    <view
+      wx:for="{{options}}"
+      wx:key="source"
+      class="option-card"
+      data-item="{{item}}"
+      bindtap="onOptionTap"
+    >
+      <view class="option-icon"><text>{{item.icon}}</text></view>
+      <view class="option-name">{{item.name}}</view>
+      <view class="option-desc">{{item.desc}}</view>
+    </view>
+  </view>
+
+  <view class="frequent-section" wx:if="{{frequentFoods.length > 0}}">
+    <view class="section-header">
+      <text class="section-title">最近常吃</text>
+      <view class="section-more" bindtap="goFrequentFood">
+        <text>更多</text>
+        <text class="more-arrow">›</text>
+      </view>
+    </view>
+    <scroll-view class="frequent-scroll" scroll-x="true" enhanced show-scrollbar="{{false}}">
+      <view class="frequent-list">
+        <view class="frequent-item" wx:for="{{frequentFoods}}" wx:key="id" data-item="{{item}}" bindtap="onFrequentTap">
+          <view class="frequent-thumb">
+            <text class="thumb-icon">•</text>
+          </view>
+          <view class="frequent-name">{{item.food_name}}</view>
+          <view class="frequent-cal">{{item.calorie}} kcal/{{item.default_weight_g}}g</view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <view class="bottom-area">
+    <button class="btn-primary camera-btn" bindtap="takePhoto" loading="{{uploading}}">
+      拍照识别
+    </button>
+  </view>
+</view>

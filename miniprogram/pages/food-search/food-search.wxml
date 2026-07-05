@@ -1,0 +1,52 @@
+<wxs module="meal" src="../../utils/meal.wxs"></wxs>
+<view class="container safe-bottom">
+  <view class="page-title">{{meal.name(mealType)}} · 手动搜索</view>
+
+  <view class="search-bar card">
+    <text class="search-icon">🔍</text>
+    <input
+      class="search-input"
+      value="{{keyword}}"
+      bindinput="onInput"
+      placeholder="输入食物名称，如：鸡胸肉、米饭"
+      confirm-type="search"
+    />
+  </view>
+
+  <view wx:if="{{loading}}" class="empty-state card">搜索中…</view>
+
+  <block wx:elif="{{results.length}}">
+    <view wx:for="{{results}}" wx:key="id" class="result-card card" data-item="{{item}}" bindtap="selectFood">
+      <view class="result-header">
+        <text class="result-name">{{item.food_name}}</text>
+        <text wx:if="{{item.category}}" class="result-tag">{{item.category}}</text>
+        <text wx:else class="result-tag result-tag-frequent">{{item.source === 'frequent_food' ? '常吃' : '标准'}}</text>
+      </view>
+      <view class="result-nutri">
+        <text>{{item.calorie_per_100g}} kcal/100g</text>
+        <text class="result-macro">蛋{{item.protein_per_100g}}g · 碳{{item.carb_per_100g}}g · 脂{{item.fat_per_100g}}g</text>
+      </view>
+    </view>
+  </block>
+
+  <view wx:elif="{{keyword}}" class="empty-state card">未找到相关食物</view>
+  <view wx:else class="empty-state card">输入关键词搜索食物库</view>
+</view>
+
+<view class="modal-mask" wx:if="{{showModal}}" bindtap="closeModal"></view>
+<view class="modal" wx:if="{{showModal}}">
+  <view class="modal-title">输入本次食用重量</view>
+  <view class="selected-name">{{selected.food_name}}</view>
+  <view class="modal-body">
+    <view class="form-row">
+      <text class="form-label">重量</text>
+      <input class="form-input" value="{{weightG}}" bindinput="onWeightInput" type="digit" placeholder="克" />
+      <text class="form-unit">g</text>
+    </view>
+    <view class="hint">每100g {{selected.calorie_per_100g}} kcal，将按重量自动换算</view>
+  </view>
+  <view class="modal-footer">
+    <button class="btn-secondary" bindtap="closeModal">取消</button>
+    <button class="btn-primary" bindtap="confirm">确认</button>
+  </view>
+</view>

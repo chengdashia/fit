@@ -1,0 +1,138 @@
+<wxs module="meal" src="../../utils/meal.wxs"></wxs>
+<view class="container safe-bottom">
+  <view class="date-bar">
+    <view class="arrow" bindtap="switchDate" data-delta="-1">‹</view>
+    <picker mode="date" value="{{currentDate}}" bindchange="onDateChange">
+      <view class="date-text">{{currentDate}} {{weekDay}}</view>
+    </picker>
+    <view class="arrow" bindtap="switchDate" data-delta="1">›</view>
+  </view>
+
+  <view class="summary-card card">
+    <view class="summary-title">今日已摄入</view>
+    <view class="summary-main">
+      <view class="summary-block">
+        <text class="summary-num">{{summary.total_calorie}}</text>
+        <text class="summary-unit">kcal</text>
+      </view>
+      <view class="summary-divider"></view>
+      <view class="summary-block">
+        <text class="summary-num">{{summary.total_protein}}</text>
+        <text class="summary-unit">g 蛋白质</text>
+      </view>
+    </view>
+    <view class="target-row">
+      目标 {{targets.calorie_target}} kcal · 蛋白质 {{targets.protein_target}} g
+    </view>
+    <view class="progress-bg">
+      <view
+        class="progress-fill"
+        style="width: {{(summary.total_calorie / targets.calorie_target) * 100}}%;"
+      ></view>
+    </view>
+  </view>
+
+  <view class="section-header" wx:if="{{latestRecordId}}">
+    <view class="section-title">今日饮食</view>
+    <view class="revoke-btn" bindtap="revokeLatest">撤销最近</view>
+  </view>
+  <view class="section-header" wx:else>
+    <view class="section-title">今日饮食</view>
+  </view>
+
+  <view wx:if="{{loading}}" class="empty-state card">加载中…</view>
+
+  <block wx:elif="{{hasAnyRecords}}">
+    <view wx:for="{{mealSections}}" wx:key="type" class="meal-section">
+      <view class="meal-section-header">
+        <view class="meal-section-title">
+          <text class="meal-name">{{item.label}}</text>
+          <text class="meal-subtotal" wx:if="{{item.hasRecords}}">{{item.subtotal.calorie}} kcal</text>
+        </view>
+        <view class="meal-add-btn" data-type="{{item.type}}" bindtap="recordMeal">+ 记录</view>
+      </view>
+
+      <block wx:if="{{item.hasRecords}}">
+        <view wx:for="{{item.records}}" wx:for-item="record" wx:key="id" class="record-card card">
+          <view class="record-header">
+            <text class="record-time">{{record.record_time}}</text>
+            <text class="record-source">{{record.source_label}}</text>
+          </view>
+          <view
+            wx:for="{{record.food_items}}"
+            wx:key="id"
+            wx:for-item="food"
+            class="food-row"
+          >
+            <view class="food-main">
+              <text class="food-name">{{food.food_name}}</text>
+              <text class="food-weight">{{food.weight_g}}g</text>
+            </view>
+            <view class="food-nutri">
+              <text class="food-cal">{{food.calorie}} kcal</text>
+              <text class="food-macro">蛋{{food.protein}}g · 碳{{food.carb}}g · 脂{{food.fat}}g</text>
+            </view>
+          </view>
+          <view class="record-total">
+            小计 {{record.total_calorie}} kcal · 蛋{{record.total_protein}}g · 碳{{record.total_carb}}g · 脂{{record.total_fat}}g
+          </view>
+          <view class="record-actions">
+            <view class="record-action" data-record="{{record}}" bindtap="openEdit">编辑</view>
+            <view class="record-action danger" data-id="{{record.id}}" bindtap="deleteRecord">删除</view>
+          </view>
+        </view>
+      </block>
+
+      <view wx:else class="meal-empty card">
+        <text class="meal-empty-text">暂无{{item.label}}记录</text>
+        <view class="meal-empty-btn" data-type="{{item.type}}" bindtap="recordMeal">记录{{item.label}}</view>
+      </view>
+    </view>
+  </block>
+
+  <view wx:else class="empty-state card">
+    <text>今天还没有记录饮食</text>
+    <view class="empty-btn" bindtap="recordDiet">记录第一餐</view>
+  </view>
+
+  <view class="fab" bindtap="recordDiet">
+    <text class="fab-text">+ 记录饮食</text>
+  </view>
+
+  <!-- Edit modal -->
+  <view class="modal-overlay" wx:if="{{showEditModal}}" bindtap="closeEdit">
+    <view class="modal-content edit-modal" catchtap="">
+      <view class="modal-title">编辑饮食记录</view>
+      <view class="edit-meta">
+        <picker mode="selector" range="{{mealTypeLabels}}" bindchange="onEditMealChange">
+          <view class="edit-meta-item">{{meal.name(editMealType)}}</view>
+        </picker>
+        <picker mode="date" value="{{editDate}}" bindchange="onEditDateChange">
+          <view class="edit-meta-item">{{editDate}}</view>
+        </picker>
+        <picker mode="time" value="{{editTime}}" bindchange="onEditTimeChange">
+          <view class="edit-meta-item">{{editTime}}</view>
+        </picker>
+      </view>
+      <scroll-view scroll-y class="edit-scroll">
+        <view wx:for="{{editFoodItems}}" wx:key="id" class="edit-food-item">
+          <input class="edit-input" value="{{item.food_name}}" data-index="{{index}}" data-field="food_name" bindinput="onEditFoodInput" placeholder="食物名称" />
+          <input class="edit-input" value="{{item.portion_desc}}" data-index="{{index}}" data-field="portion_desc" bindinput="onEditFoodInput" placeholder="份量描述" />
+          <view class="edit-row">
+            <input class="edit-input half" type="digit" value="{{item.weight_g}}" data-index="{{index}}" data-field="weight_g" bindinput="onEditFoodInput" placeholder="克数" />
+            <input class="edit-input half" type="digit" value="{{item.calorie}}" data-index="{{index}}" data-field="calorie" bindinput="onEditFoodInput" placeholder="热量" />
+          </view>
+          <view class="edit-row">
+            <input class="edit-input third" type="digit" value="{{item.protein}}" data-index="{{index}}" data-field="protein" bindinput="onEditFoodInput" placeholder="蛋白质" />
+            <input class="edit-input third" type="digit" value="{{item.carb}}" data-index="{{index}}" data-field="carb" bindinput="onEditFoodInput" placeholder="碳水" />
+            <input class="edit-input third" type="digit" value="{{item.fat}}" data-index="{{index}}" data-field="fat" bindinput="onEditFoodInput" placeholder="脂肪" />
+          </view>
+        </view>
+      </scroll-view>
+      <view class="modal-actions">
+        <view class="modal-btn modal-cancel" bindtap="closeEdit">取消</view>
+        <view class="modal-btn modal-confirm" bindtap="saveEdit">保存</view>
+      </view>
+    </view>
+  </view>
+</view>

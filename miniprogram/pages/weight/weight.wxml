@@ -1,0 +1,113 @@
+<view class="container safe-bottom">
+  <view class="page-hero">
+    <view>
+      <view class="hero-title">体重趋势</view>
+      <view class="hero-subtitle">记录变化，稳稳靠近目标</view>
+    </view>
+    <view class="hero-avatar"></view>
+  </view>
+
+  <view class="summary-card">
+    <view class="summary-main">
+      <view class="summary-block">
+        <text class="summary-label">最新体重</text>
+        <view class="summary-value-row">
+          <text class="summary-number">{{latest ? latest.weight_kg : '--'}}</text>
+          <text class="summary-unit">kg</text>
+        </view>
+      </view>
+      <view class="summary-divider"></view>
+      <view class="summary-block">
+        <text class="summary-label">目标体重</text>
+        <view class="summary-value-row">
+          <text class="summary-number secondary">{{targetWeight != null ? targetWeight : '--'}}</text>
+          <text class="summary-unit">kg</text>
+        </view>
+      </view>
+      <view class="summary-divider"></view>
+      <view class="summary-block">
+        <text class="summary-label">距离目标</text>
+        <view class="summary-value-row">
+          <text class="summary-number">{{latest && targetWeight != null ? (distance > 0 ? distance : -distance) : '--'}}</text>
+          <text class="summary-unit">kg</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="card trend-card">
+    <view class="range-tabs">
+      <view class="range-tab {{range === '7d' ? 'active' : ''}}" data-range="7d" bindtap="switchRange">7天</view>
+      <view class="range-tab {{range === '30d' ? 'active' : ''}}" data-range="30d" bindtap="switchRange">30天</view>
+    </view>
+    <view class="trend-empty" wx:if="{{trend.length === 0}}">
+      <text>{{range === '7d' ? '最近7天还没有体重记录' : '最近30天还没有体重记录'}}</text>
+      <view class="trend-empty-btn" bindtap="openAddModal">记录体重</view>
+    </view>
+    <view class="trend-hint" wx:elif="{{trend.length < 2}}">
+      <text>继续记录几天后，就可以看到体重变化趋势</text>
+      <canvas type="2d" id="weightTrendChart" class="trend-canvas"></canvas>
+    </view>
+    <canvas wx:else type="2d" id="weightTrendChart" class="trend-canvas"></canvas>
+  </view>
+
+  <view class="section-header">
+    <text class="section-title">体重记录</text>
+  </view>
+
+  <view class="history-list">
+    <view class="history-card" wx:for="{{history}}" wx:key="id">
+      <view class="history-info">
+        <text class="history-weight">{{item.weight_kg}} kg</text>
+        <text class="history-note" wx:if="{{item.note}}">{{item.note}}</text>
+        <text class="history-time">{{item.dateText}} {{item.timeText}}</text>
+      </view>
+      <view class="history-actions">
+        <view class="history-btn edit" data-item="{{item}}" bindtap="openEditModal">编辑</view>
+        <view class="history-btn delete" data-id="{{item.id}}" bindtap="deleteRecord">删除</view>
+      </view>
+    </view>
+    <view class="load-more" wx:if="{{hasMore}}" bindtap="loadHistory">加载更多</view>
+    <view class="no-more" wx:if="{{!hasMore && history.length > 0}}">没有更多了</view>
+  </view>
+
+  <view class="fab" bindtap="openAddModal">
+    <text class="fab-icon">+</text>
+    <text class="fab-text">记录体重</text>
+  </view>
+</view>
+
+<view class="modal-mask" wx:if="{{modalVisible}}" bindtap="closeModal">
+  <view class="modal-content" catchtap="stopPropagation">
+    <view class="modal-header">
+      <text class="modal-title">{{modalTitle}}</text>
+      <view class="modal-close" bindtap="closeModal">×</view>
+    </view>
+    <view class="modal-body">
+      <view class="form-row">
+        <text class="form-label">体重 (kg)</text>
+        <input class="form-input" type="digit" value="{{form.weight_kg}}" placeholder="0.0" bindinput="onWeightInput" />
+      </view>
+      <view class="form-row">
+        <text class="form-label">日期</text>
+        <picker mode="date" value="{{form.date}}" bindchange="onDateChange">
+          <view class="form-picker">{{form.date}}</view>
+        </picker>
+      </view>
+      <view class="form-row">
+        <text class="form-label">时间</text>
+        <picker mode="time" value="{{form.time}}" bindchange="onTimeChange">
+          <view class="form-picker">{{form.time}}</view>
+        </picker>
+      </view>
+      <view class="form-row">
+        <text class="form-label">备注</text>
+        <input class="form-input" value="{{form.note}}" placeholder="可选" bindinput="onNoteInput" />
+      </view>
+    </view>
+    <view class="modal-footer">
+      <view class="btn-secondary modal-btn" bindtap="closeModal">取消</view>
+      <view class="btn-primary modal-btn" bindtap="saveRecord">保存</view>
+    </view>
+  </view>
+</view>

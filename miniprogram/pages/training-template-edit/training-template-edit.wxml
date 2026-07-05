@@ -1,0 +1,113 @@
+<view class="container safe-bottom">
+  <view class="card base-form">
+    <view class="form-row">
+      <text class="form-label">模板名称</text>
+      <input class="form-input" value="{{form.template_name}}" placeholder="例如：胸背超级组" bindinput="onNameInput" />
+    </view>
+    <view class="form-row">
+      <text class="form-label">训练目标</text>
+      <picker mode="selector" range="{{goalOptions}}" range-key="label" value="{{goalIndex}}" bindchange="onGoalChange">
+        <view class="form-picker">{{goalOptions[goalIndex].label}}</view>
+      </picker>
+    </view>
+    <view class="form-row">
+      <text class="form-label">备注</text>
+      <input class="form-input" value="{{form.description}}" placeholder="可选" bindinput="onDescInput" />
+    </view>
+  </view>
+
+  <view class="section-title">动作单元</view>
+
+  <view class="unit-list">
+    <view class="unit-card" wx:for="{{units}}" wx:for-item="u" wx:key="_localId">
+      <view class="unit-header">
+        <view class="unit-type-tag {{u.unit_type}}">{{u.unit_type === 'normal' ? '普通动作' : u.unit_type === 'superset' ? '超级组' : '递减组'}}</view>
+        <view class="unit-actions">
+          <view class="unit-move" data-id="{{u._localId}}" data-dir="up" bindtap="moveUnit">↑</view>
+          <view class="unit-move" data-id="{{u._localId}}" data-dir="down" bindtap="moveUnit">↓</view>
+          <view class="unit-remove" data-id="{{u._localId}}" bindtap="removeUnit">×</view>
+        </view>
+      </view>
+
+      <view class="unit-name-row">
+        <text class="unit-name-label">单元名称</text>
+        <input class="unit-name-input" value="{{u.unit_name}}" data-id="{{u._localId}}" data-field="unit_name" bindinput="updateUnitField" placeholder="单元名称" />
+      </view>
+
+      <!-- 普通动作 -->
+      <block wx:if="{{u.unit_type === 'normal'}}">
+        <view class="sub-row">
+          <text class="sub-label">动作名称</text>
+          <input class="sub-input" value="{{u.config.exercise_name}}" data-id="{{u._localId}}" data-field="exercise_name" bindinput="updateConfigField" placeholder="如：杠铃卧推" />
+        </view>
+        <view class="sets-header">
+          <text class="sets-title">组数</text>
+          <view class="add-sub" data-id="{{u._localId}}" bindtap="addSet">+ 添加组</view>
+        </view>
+        <view class="set-row" wx:for="{{u.config.sets}}" wx:for-item="s" wx:for-index="sidx" wx:key="set_index">
+          <text class="set-index">第{{s.set_index}}组</text>
+          <input class="set-input" type="digit" value="{{s.target_weight}}" data-id="{{u._localId}}" data-index="{{sidx}}" data-field="target_weight" bindinput="updateSet" placeholder="kg" />
+          <input class="set-input" type="number" value="{{s.target_reps}}" data-id="{{u._localId}}" data-index="{{sidx}}" data-field="target_reps" bindinput="updateSet" placeholder="次" />
+          <input class="set-input" type="number" value="{{s.target_rest_seconds}}" data-id="{{u._localId}}" data-index="{{sidx}}" data-field="target_rest_seconds" bindinput="updateSet" placeholder="秒" />
+          <view class="set-remove" data-id="{{u._localId}}" data-index="{{sidx}}" bindtap="removeSet">×</view>
+        </view>
+      </block>
+
+      <!-- 超级组 -->
+      <block wx:if="{{u.unit_type === 'superset'}}">
+        <view class="sub-row">
+          <text class="sub-label">循环轮数</text>
+          <input class="sub-input" type="number" value="{{u.config.rounds}}" data-id="{{u._localId}}" data-field="rounds" bindinput="updateConfigField" placeholder="轮" />
+        </view>
+        <view class="sub-row">
+          <text class="sub-label">组间休息</text>
+          <input class="sub-input" type="number" value="{{u.config.target_rest_seconds}}" data-id="{{u._localId}}" data-field="target_rest_seconds" bindinput="updateConfigField" placeholder="秒" />
+        </view>
+        <view class="sets-header">
+          <text class="sets-title">动作</text>
+          <view class="add-sub" data-id="{{u._localId}}" bindtap="addExercise">+ 添加动作</view>
+        </view>
+        <view class="set-row" wx:for="{{u.config.exercises}}" wx:for-item="ex" wx:for-index="exidx" wx:key="exercise_name">
+          <input class="ex-name" value="{{ex.exercise_name}}" data-id="{{u._localId}}" data-index="{{exidx}}" data-field="exercise_name" bindinput="updateExercise" placeholder="动作名" />
+          <input class="set-input" type="digit" value="{{ex.target_weight}}" data-id="{{u._localId}}" data-index="{{exidx}}" data-field="target_weight" bindinput="updateExercise" placeholder="kg" />
+          <input class="set-input" type="number" value="{{ex.target_reps}}" data-id="{{u._localId}}" data-index="{{exidx}}" data-field="target_reps" bindinput="updateExercise" placeholder="次" />
+          <view class="set-remove" data-id="{{u._localId}}" data-index="{{exidx}}" bindtap="removeExercise">×</view>
+        </view>
+      </block>
+
+      <!-- 递减组 -->
+      <block wx:if="{{u.unit_type === 'dropset'}}">
+        <view class="sub-row">
+          <text class="sub-label">动作名称</text>
+          <input class="sub-input" value="{{u.config.exercise_name}}" data-id="{{u._localId}}" data-field="exercise_name" bindinput="updateConfigField" placeholder="如：哑铃弯举" />
+        </view>
+        <view class="sub-row">
+          <text class="sub-label">循环轮数</text>
+          <input class="sub-input" type="number" value="{{u.config.rounds}}" data-id="{{u._localId}}" data-field="rounds" bindinput="updateConfigField" placeholder="轮" />
+        </view>
+        <view class="sub-row">
+          <text class="sub-label">组间休息</text>
+          <input class="sub-input" type="number" value="{{u.config.target_rest_seconds}}" data-id="{{u._localId}}" data-field="target_rest_seconds" bindinput="updateConfigField" placeholder="秒" />
+        </view>
+        <view class="sets-header">
+          <text class="sets-title">重量段</text>
+          <view class="add-sub" data-id="{{u._localId}}" bindtap="addSegment">+ 添加段</view>
+        </view>
+        <view class="set-row" wx:for="{{u.config.segments}}" wx:for-item="seg" wx:for-index="segidx" wx:key="segment_index">
+          <text class="set-index">第{{seg.segment_index}}段</text>
+          <input class="set-input" type="digit" value="{{seg.target_weight}}" data-id="{{u._localId}}" data-index="{{segidx}}" data-field="target_weight" bindinput="updateSegment" placeholder="kg" />
+          <input class="set-input" type="number" value="{{seg.target_reps}}" data-id="{{u._localId}}" data-index="{{segidx}}" data-field="target_reps" bindinput="updateSegment" placeholder="次" />
+          <view class="set-remove" data-id="{{u._localId}}" data-index="{{segidx}}" bindtap="removeSegment">×</view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <view class="add-unit-bar">
+    <view class="add-unit-btn" bindtap="addNormal">+ 普通动作</view>
+    <view class="add-unit-btn" bindtap="addSuperset">+ 超级组</view>
+    <view class="add-unit-btn" bindtap="addDropset">+ 递减组</view>
+  </view>
+
+  <view class="btn-primary save-btn" bindtap="saveTemplate">保存模板</view>
+</view>

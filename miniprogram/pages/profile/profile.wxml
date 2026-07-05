@@ -1,0 +1,139 @@
+<view class="profile-page">
+  <view class="status-bar" style="height: {{statusBarHeight}}px;"></view>
+
+  <view class="container">
+    <view class="page-header">
+      <view class="header-text">
+        <view class="profile-title">我的</view>
+        <view class="profile-subtitle">坚持记录，遇见更好的自己</view>
+      </view>
+    </view>
+
+    <!-- 用户与目标卡片 -->
+    <view class="hero-card glass-card">
+      <view class="hero-top">
+        <view class="avatar-wrap">
+          <image
+            wx:if="{{profile.avatar_url}}"
+            class="avatar-img"
+            src="{{profile.avatar_url}}"
+            mode="aspectFill"
+          />
+          <view wx:else class="avatar-placeholder">
+            <view class="avatar-silhouette"></view>
+          </view>
+        </view>
+        <view class="hero-info">
+          <view class="nickname">{{profile.nickname || '健身达人'}}</view>
+          <view class="status-pill" wx:if="{{goal}}">
+            <text class="status-icon">{{goalStageIcon}}</text>
+            <text class="status-text">{{goalStatusText}}</text>
+          </view>
+          <view class="status-pill empty" wx:else bindtap="goEditProfile">
+            <text class="status-text">点击设置目标</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="goal-stats" wx:if="{{goal}}">
+        <view class="stat-item">
+          <text class="stat-label">每日热量目标</text>
+          <view class="stat-value-row">
+            <text class="stat-value">{{goal.calorie_target}}</text>
+            <text class="stat-unit">kcal</text>
+          </view>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat-item">
+          <text class="stat-label">每日蛋白质目标</text>
+          <view class="stat-value-row">
+            <text class="stat-value">{{goal.protein_target}}</text>
+            <text class="stat-unit">g</text>
+          </view>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat-item">
+          <text class="stat-label">目标体重</text>
+          <view class="stat-value-row">
+            <text class="stat-value">{{goal.target_weight_kg || '-'}}</text>
+            <text class="stat-unit">kg</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 当前体重 / 身高 -->
+    <view class="body-card glass-card">
+      <view class="body-stat">
+        <view class="body-icon weight-icon">
+          <text class="body-icon-text">⚖</text>
+        </view>
+        <view class="body-meta">
+          <text class="body-label">当前体重</text>
+          <text class="body-value">{{profile.current_weight_kg ? profile.current_weight_kg + ' kg' : '未填写'}}</text>
+        </view>
+      </view>
+      <view class="body-split"></view>
+      <view class="body-stat">
+        <view class="body-icon height-icon">
+          <text class="body-icon-text">📏</text>
+        </view>
+        <view class="body-meta">
+          <text class="body-label">身高</text>
+          <text class="body-value">{{profile.height_cm ? profile.height_cm + ' cm' : '未填写'}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 功能菜单 -->
+    <view class="menu-card glass-card">
+      <view class="menu-item" bindtap="goEditProfile">
+        <view class="menu-icon goal-icon">
+          <image class="menu-icon-img" src="/assets/icons/goal.png" mode="aspectFit" />
+        </view>
+        <text class="menu-text">目标设置</text>
+        <text class="menu-arrow">›</text>
+      </view>
+      <view class="menu-item" bindtap="goEditProfile">
+        <view class="menu-icon info-icon">
+          <image class="menu-icon-img" src="/assets/icons/body.png" mode="aspectFit" />
+        </view>
+        <text class="menu-text">基础信息</text>
+        <text class="menu-arrow">›</text>
+      </view>
+      <view class="menu-item" bindtap="goFrequentFood">
+        <view class="menu-icon diet-icon">
+          <image class="menu-icon-img" src="/assets/icons/diet.png" mode="aspectFit" />
+        </view>
+        <text class="menu-text">常吃食物</text>
+        <text class="menu-arrow">›</text>
+      </view>
+      <view class="menu-item" bindtap="goTrainingHistory">
+        <view class="menu-icon train-icon">
+          <image class="menu-icon-img" src="/assets/icons/training.png" mode="aspectFit" />
+        </view>
+        <text class="menu-text">训练历史</text>
+        <text class="menu-arrow">›</text>
+      </view>
+      <view class="menu-item" bindtap="showAbout">
+        <view class="menu-icon about-icon">
+          <image class="menu-icon-img" src="/assets/icons/logo.png" mode="aspectFit" />
+        </view>
+        <text class="menu-text">关于小程序</text>
+        <text class="menu-arrow">›</text>
+      </view>
+      <view class="menu-item logout" bindtap="handleLogout">
+        <view class="menu-icon logout-icon">
+          <image class="menu-icon-img" src="/assets/icons/logout.png" mode="aspectFit" />
+        </view>
+        <text class="menu-text">退出登录</text>
+        <text class="menu-arrow">›</text>
+      </view>
+    </view>
+
+    <view class="footer-quote">
+      <text class="quote-heart">♡</text>
+      <text class="quote-text">每一次选择，都是在靠近目标</text>
+    </view>
+  </view>
+</view>

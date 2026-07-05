@@ -1,0 +1,38 @@
+<view class="container safe-bottom" wx:if="{{restRecord}}">
+  <view class="timer-card">
+    <text class="timer-label">{{isEnded ? '休息结束' : '休息倒计时'}}</text>
+    <text class="timer-number">{{timerText}}</text>
+    <view class="timer-ring" style="--progress: {{isEnded ? 100 : (remainingSeconds / (restRecord.planned_rest_seconds || 60)) * 100}}%;">
+      <view class="ring-bg"></view>
+      <view class="ring-fill"></view>
+    </view>
+  </view>
+
+  <view class="card info-card" wx:if="{{completedItem}}">
+    <text class="info-label">刚刚完成</text>
+    <text class="info-name">{{completedItem.exercise_name}}</text>
+    <view class="info-detail">
+      <text class="info-tag">{{completedItem.actual_weight}} kg × {{completedItem.actual_reps}} 次</text>
+    </view>
+  </view>
+
+  <view class="card info-card next" wx:if="{{nextItem}}">
+    <text class="info-label">下一项</text>
+    <text class="info-name">{{nextItem.exercise_name}}</text>
+    <view class="info-detail">
+      <text class="info-tag">目标 {{nextItem.target_weight}} kg × {{nextItem.target_reps}} 次</text>
+    </view>
+  </view>
+
+  <view class="extend-bar" wx:if="{{!isEnded}}">
+    <view class="extend-btn" data-seconds="30" bindtap="extendRest">+30s</view>
+    <view class="extend-btn" data-seconds="60" bindtap="extendRest">+60s</view>
+    <view class="extend-btn" data-seconds="120" bindtap="extendRest">+120s</view>
+  </view>
+
+  <view class="bottom-actions">
+    <view wx:if="{{isEnded}}" class="btn-primary action-main" bindtap="nextSet">开始下一组</view>
+    <view wx:else class="btn-primary action-main" bindtap="skipRest">跳过休息</view>
+    <view class="action-secondary" bindtap="showFinishSheet">结束训练</view>
+  </view>
+</view>

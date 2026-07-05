@@ -1,0 +1,55 @@
+<view class="container safe-bottom">
+  <view class="history-list" wx:if="{{list.length > 0}}">
+    <view class="history-card" wx:for="{{list}}" wx:key="id" data-id="{{item.id}}" bindtap="showDetail">
+      <view class="history-main">
+        <text class="history-name">{{item.template_name_snapshot}}</text>
+        <view class="history-stats">
+          <text class="history-stat">{{item.dateText}} {{item.timeText}}</text>
+          <text class="history-stat">时长 {{item.durationText}}</text>
+        </view>
+        <view class="history-counts">
+          <text class="count-tag completed">完成 {{item.completed_count}}</text>
+          <text class="count-tag skipped">跳过 {{item.skipped_count}}</text>
+          <text class="count-tag status">{{item.statusText}}</text>
+        </view>
+      </view>
+      <view class="history-arrow">›</view>
+    </view>
+    <view class="load-more" wx:if="{{hasMore}}" bindtap="loadHistory">加载更多</view>
+    <view class="no-more" wx:if="{{!hasMore}}">没有更多了</view>
+  </view>
+
+  <view class="empty-state" wx:if="{{list.length === 0 && !loading}}">
+    <view class="empty-icon">📋</view>
+    <text class="empty-title">暂无训练记录</text>
+    <text class="empty-desc">完成一次训练后在这里查看</text>
+  </view>
+</view>
+
+<view class="detail-mask" wx:if="{{detailId}}" bindtap="closeDetail">
+  <view class="detail-panel" catchtap="stopPropagation">
+    <view class="detail-header">
+      <text class="detail-title">训练详情</text>
+      <view class="detail-close" bindtap="closeDetail">×</view>
+    </view>
+    <scroll-view class="detail-body" scroll-y>
+      <view class="detail-info" wx:if="{{detail}}">
+        <text class="detail-name">{{detail.template_name_snapshot}}</text>
+        <text class="detail-time">{{detail.startText}}</text>
+        <text class="detail-duration">时长 {{detail.durationText}}</text>
+      </view>
+      <view class="detail-units" wx:if="{{detail}}">
+        <view class="detail-unit" wx:for="{{detail.units}}" wx:for-item="u" wx:key="id">
+          <text class="detail-unit-name">{{u.unit_name}}</text>
+          <view class="detail-item" wx:for="{{u.items}}" wx:for-item="it" wx:key="id">
+            <view class="detail-item-head">
+              <text class="detail-item-name">{{it.exercise_name}}</text>
+              <text class="detail-badge" wx:if="{{it.badgeText}}">{{it.badgeText}}</text>
+            </view>
+            <text class="detail-item-result">{{it.resultText}}</text>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+</view>

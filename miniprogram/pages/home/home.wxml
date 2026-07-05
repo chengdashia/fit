@@ -1,0 +1,193 @@
+<view class="container home-container safe-bottom">
+  <!-- Header -->
+  <view class="home-header">
+    <view class="header-text">
+      <view class="page-heading">今日概览</view>
+      <view class="greeting">{{greeting}}，{{nickname}}</view>
+      <view class="date-text">{{displayDate}}</view>
+    </view>
+    <view class="avatar">
+      <text class="avatar-text">{{avatarInitial}}</text>
+    </view>
+  </view>
+
+  <!-- Loading -->
+  <view wx:if="{{loading}}" class="card loading-card">
+    <text class="loading-text">加载中…</text>
+  </view>
+
+  <!-- Error -->
+  <view wx:elif="{{loadError}}" class="card error-card">
+    <view class="empty-icon">⚠️</view>
+    <view class="empty-title">数据加载失败</view>
+    <view class="empty-desc">请检查网络后重试</view>
+    <view class="btn-primary" bindtap="retryLoad">重新加载</view>
+  </view>
+
+  <!-- Empty goal state -->
+  <block wx:elif="{{!goal}}">
+    <view class="card empty-goal-card">
+      <view class="empty-icon">🎯</view>
+      <view class="empty-title">开启你的健身计划</view>
+      <view class="empty-desc">设置目标后才能查看每日数据看板</view>
+      <view class="btn-primary" bindtap="goOnboarding">去设置目标</view>
+    </view>
+  </block>
+
+  <block wx:else>
+    <!-- Diet card -->
+    <view class="card diet-card">
+      <view class="card-header" bindtap="goDiet">
+        <view class="card-title">
+          <text class="title-icon icon-diet">🍽</text>
+          今日饮食
+        </view>
+        <text class="card-arrow">›</text>
+      </view>
+
+      <view class="diet-main">
+        <view class="diet-info">
+          <view class="diet-number">
+            {{diet.calorie_intake}}
+            <text class="diet-unit">/ {{calorieTarget}} kcal</text>
+          </view>
+          <view class="diet-remaining {{calorieOver ? 'diet-over' : ''}}">{{calorieDiffText}}</view>
+        </view>
+        <view class="diet-ring-wrap">
+          <view class="diet-ring" style="background: conic-gradient(#3b82f6 0deg {{dietProgress}}deg, #eef2ff {{dietProgress}}deg 360deg);">
+            <view class="ring-center">
+              <text class="ring-percent">{{dietPercent}}%</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="macro-list">
+        <view class="macro-item" wx:for="{{macros}}" wx:key="name">
+          <view class="macro-header">
+            <text class="macro-name">{{item.name}}</text>
+            <text class="macro-value">{{item.intake}}/{{item.target}}g</text>
+          </view>
+          <view class="macro-bar-bg">
+            <view class="macro-bar-fill" style="width: {{item.percent}}%; background: {{item.color}};"></view>
+          </view>
+        </view>
+      </view>
+
+      <view class="card-actions">
+        <view class="card-action-btn" catchtap="goDietRecord">记录饮食</view>
+        <view class="card-action-btn" catchtap="goDiet">查看今日饮食</view>
+      </view>
+    </view>
+
+    <!-- Training card -->
+    <view class="card training-card">
+      <view class="card-header">
+        <view class="card-title">
+          <text class="title-icon icon-training">🏋</text>
+          今日训练
+        </view>
+        <view class="status-tag tag-{{training.today_status}}">{{trainingStatusText}}</view>
+      </view>
+
+      <view class="training-body">
+        <view class="training-stat">
+          <text class="stat-num">{{training.weekly_training_count}}</text>
+          <text class="stat-label">本周训练</text>
+        </view>
+        <view class="training-template">
+          <text class="template-label">上次模板</text>
+          <text class="template-name">{{lastTemplate}}</text>
+        </view>
+      </view>
+
+      <view class="training-cta {{ctaAction === 'start' ? 'btn-secondary' : 'btn-primary'}}" bindtap="onTrainingTap">
+        {{ctaText}}
+      </view>
+    </view>
+
+    <!-- Weight card -->
+    <view class="card weight-card">
+      <view class="card-header">
+        <view class="card-title">
+          <text class="title-icon icon-weight">⚖</text>
+          体重状态
+        </view>
+      </view>
+
+      <view class="weight-main" bindtap="goWeight">
+        <view class="weight-stat">
+          <view class="weight-row">
+            <text class="weight-num">{{displayWeight}}</text>
+            <text class="weight-unit">kg</text>
+          </view>
+          <text class="weight-label">当前体重</text>
+          <text class="weight-time" wx:if="{{weight.latest_record_time}}">{{weight.latest_record_time}}</text>
+        </view>
+        <view class="weight-target">
+          <text class="target-row">目标 {{targetWeightDisplay}} kg</text>
+          <text class="target-row diff-{{diffPositive ? 'plus' : 'minus'}}" wx:if="{{diffDisplay}}">
+            距目标 {{diffDisplay}} kg
+          </text>
+        </view>
+      </view>
+
+      <canvas type="2d" id="weightChart" class="weight-chart"></canvas>
+
+      <view class="card-actions">
+        <view class="card-action-btn" catchtap="showWeightModal">记录体重</view>
+        <view class="card-action-btn" catchtap="goWeight">查看趋势</view>
+      </view>
+    </view>
+
+    <!-- Quick actions -->
+    <view class="quick-actions">
+      <view class="quick-btn" bindtap="goDietRecord">
+        <text class="quick-icon">🍽</text>
+        <text class="quick-label">记录饮食</text>
+      </view>
+      <view class="quick-btn" bindtap="onTrainingTap">
+        <text class="quick-icon">🏋</text>
+        <text class="quick-label">{{quickTrainingLabel}}</text>
+      </view>
+      <view class="quick-btn" bindtap="showWeightModal">
+        <text class="quick-icon">⚖</text>
+        <text class="quick-label">记录体重</text>
+      </view>
+    </view>
+  </block>
+
+  <!-- Weight record modal -->
+  <view class="modal-overlay" wx:if="{{showWeightModal}}" bindtap="hideWeightModal">
+    <view class="modal-content" catchtap="noop">
+      <view class="modal-title">记录体重</view>
+      <view class="weight-hint" wx:if="{{weightHint}}">上次体重 {{weightHint}} kg</view>
+      <input
+        class="modal-input"
+        type="digit"
+        placeholder="请输入体重（kg）"
+        value="{{weightInput}}"
+        focus="{{showWeightModal}}"
+        bindinput="onWeightInput"
+      />
+      <view class="modal-row">
+        <picker mode="date" value="{{weightDate}}" bindchange="onWeightDateChange">
+          <view class="modal-picker">{{weightDate}}</view>
+        </picker>
+        <picker mode="time" value="{{weightTime}}" bindchange="onWeightTimeChange">
+          <view class="modal-picker">{{weightTime}}</view>
+        </picker>
+      </view>
+      <input
+        class="modal-input"
+        placeholder="备注（选填）"
+        value="{{weightNote}}"
+        bindinput="onWeightNoteInput"
+      />
+      <view class="modal-actions">
+        <view class="modal-btn modal-cancel" bindtap="hideWeightModal">取消</view>
+        <view class="modal-btn modal-confirm" bindtap="submitWeight">确定</view>
+      </view>
+    </view>
+  </view>
+</view>

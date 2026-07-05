@@ -1,0 +1,10 @@
+<view class="login-page">
+  <view class="login-card">
+    <image class="app-logo" src="/assets/icons/logo.png" mode="aspectFit" />
+    <view class="app-name">健身饮食记录</view>
+    <view class="loading-box">
+      <view class="spinner"></view>
+      <text class="loading-text">正在登录...</text>
+    </view>
+  </view>
+</view>

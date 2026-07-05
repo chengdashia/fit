@@ -1,0 +1,106 @@
+<wxs module="meal" src="../../utils/meal.wxs"></wxs>
+<view class="container safe-bottom">
+  <view class="page-title">{{meal.name(mealType)}} · 自定义食物</view>
+
+  <view class="card form-card">
+    <view class="form-row">
+      <text class="form-label">餐次</text>
+      <view class="meal-selector">
+        <view
+          wx:for="{{mealTypes}}"
+          wx:key="*this"
+          class="meal-pill {{mealType === item ? 'active' : ''}}"
+          data-type="{{item}}"
+          bindtap="selectMeal"
+        >
+          {{meal.name(item)}}
+        </view>
+      </view>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">名称</text>
+      <input
+        class="form-input"
+        value="{{form.food_name}}"
+        data-field="food_name"
+        bindinput="onInput"
+        placeholder="如：家常炒饭"
+      />
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">克数</text>
+      <input
+        class="form-input"
+        value="{{form.weight_g}}"
+        data-field="weight_g"
+        bindinput="onInput"
+        type="digit"
+        placeholder="本次食用克数"
+      />
+      <text class="form-unit">g</text>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">热量</text>
+      <input
+        class="form-input"
+        value="{{form.calorie}}"
+        data-field="calorie"
+        bindinput="onInput"
+        type="digit"
+        placeholder="kcal"
+      />
+      <text class="form-unit">kcal</text>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">蛋白质</text>
+      <input
+        class="form-input"
+        value="{{form.protein}}"
+        data-field="protein"
+        bindinput="onInput"
+        type="digit"
+        placeholder="0"
+      />
+      <text class="form-unit">g</text>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">碳水</text>
+      <input
+        class="form-input"
+        value="{{form.carb}}"
+        data-field="carb"
+        bindinput="onInput"
+        type="digit"
+        placeholder="0"
+      />
+      <text class="form-unit">g</text>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">脂肪</text>
+      <input
+        class="form-input"
+        value="{{form.fat}}"
+        data-field="fat"
+        bindinput="onInput"
+        type="digit"
+        placeholder="0"
+      />
+      <text class="form-unit">g</text>
+    </view>
+  </view>
+
+  <view class="switch-row card">
+    <text>保存为常吃食物</text>
+    <switch checked="{{saveAsFrequent}}" bindchange="toggleSave" color="#3b82f6" />
+  </view>
+
+  <view class="bottom-area">
+    <button class="btn-primary submit-btn" bindtap="submit">确认记录</button>
+  </view>
+</view>

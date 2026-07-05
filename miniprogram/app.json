@@ -1,0 +1,67 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/onboarding/onboarding",
+    "pages/home/home",
+    "pages/diet/diet",
+    "pages/diet-record/diet-record",
+    "pages/diet-result/diet-result",
+    "pages/food-search/food-search",
+    "pages/frequent-food/frequent-food",
+    "pages/custom-food/custom-food",
+    "pages/weight/weight",
+    "pages/training/training",
+    "pages/training-template-edit/training-template-edit",
+    "pages/training-session/training-session",
+    "pages/training-rest/training-rest",
+    "pages/training-history/training-history",
+    "pages/profile/profile"
+  ],
+  "window": {
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#f5f7fa",
+    "navigationBarTitleText": "健身饮食记录",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f5f7fa"
+  },
+  "tabBar": {
+    "color": "#9ca3af",
+    "selectedColor": "#3b82f6",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "首页",
+        "iconPath": "assets/icons/home.png",
+        "selectedIconPath": "assets/icons/home-active.png"
+      },
+      {
+        "pagePath": "pages/diet/diet",
+        "text": "饮食",
+        "iconPath": "assets/icons/diet.png",
+        "selectedIconPath": "assets/icons/diet-active.png"
+      },
+      {
+        "pagePath": "pages/training/training",
+        "text": "训练",
+        "iconPath": "assets/icons/training.png",
+        "selectedIconPath": "assets/icons/training-active.png"
+      },
+      {
+        "pagePath": "pages/weight/weight",
+        "text": "体重",
+        "iconPath": "assets/icons/weight.png",
+        "selectedIconPath": "assets/icons/weight-active.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的",
+        "iconPath": "assets/icons/profile.png",
+        "selectedIconPath": "assets/icons/profile-active.png"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

@@ -1,0 +1,427 @@
+.date-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24rpx;
+}
+
+.arrow {
+  font-size: 48rpx;
+  color: var(--primary);
+  padding: 0 32rpx;
+  font-weight: 300;
+}
+
+.date-text {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--text-main);
+  padding: 12rpx 24rpx;
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow);
+}
+
+.meal-tabs {
+  display: flex;
+  justify-content: space-between;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 12rpx;
+  margin-bottom: 24rpx;
+  box-shadow: var(--shadow);
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  font-size: 28rpx;
+  color: var(--text-secondary);
+  padding: 16rpx 0;
+  border-radius: var(--radius-md);
+  margin: 0 6rpx;
+  transition: all 0.2s;
+}
+
+.tab.active {
+  background: var(--primary-gradient);
+  color: #fff;
+  font-weight: 600;
+}
+
+.summary-card {
+  background: var(--primary-gradient);
+  color: #fff;
+  border-radius: var(--radius-lg);
+  padding: 40rpx 32rpx;
+  margin-bottom: 32rpx;
+  box-shadow: 0 12rpx 40rpx rgba(59, 130, 246, 0.25);
+}
+
+.summary-title {
+  font-size: 26rpx;
+  opacity: 0.9;
+  margin-bottom: 16rpx;
+}
+
+.summary-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-bottom: 24rpx;
+}
+
+.summary-block {
+  text-align: center;
+}
+
+.summary-num {
+  font-size: 56rpx;
+  font-weight: 700;
+}
+
+.summary-unit {
+  font-size: 24rpx;
+  opacity: 0.85;
+  margin-left: 8rpx;
+}
+
+.summary-divider {
+  width: 2rpx;
+  height: 60rpx;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.target-row {
+  font-size: 24rpx;
+  opacity: 0.9;
+  margin-bottom: 12rpx;
+}
+
+.progress-bg {
+  height: 12rpx;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 999rpx;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #fff;
+  border-radius: 999rpx;
+  max-width: 100%;
+}
+
+.meal-section {
+  margin-bottom: 32rpx;
+}
+
+.meal-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16rpx;
+}
+
+.meal-section-title {
+  display: flex;
+  align-items: baseline;
+  gap: 16rpx;
+}
+
+.meal-name {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.meal-subtotal {
+  font-size: 24rpx;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.meal-add-btn {
+  font-size: 26rpx;
+  color: var(--primary);
+  font-weight: 600;
+  padding: 8rpx 20rpx;
+  background: var(--primary-light);
+  border-radius: 999rpx;
+}
+
+.meal-empty {
+  text-align: center;
+  padding: 32rpx 24rpx;
+  margin-bottom: 8rpx;
+}
+
+.meal-empty-text {
+  display: block;
+  font-size: 26rpx;
+  color: var(--text-light);
+  margin-bottom: 16rpx;
+}
+
+.meal-empty-btn {
+  display: inline-block;
+  font-size: 26rpx;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+
+.revoke-btn {
+  font-size: 26rpx;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.record-actions {
+  display: flex;
+  gap: 24rpx;
+  margin-top: 16rpx;
+  padding-top: 16rpx;
+  border-top: 1rpx solid var(--border);
+}
+
+.record-action {
+  font-size: 26rpx;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.record-action.danger {
+  color: var(--danger);
+}
+
+.empty-btn {
+  margin-top: 24rpx;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal-content {
+  width: 620rpx;
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 40rpx;
+}
+
+.edit-modal {
+  max-height: 70vh;
+}
+
+.edit-scroll {
+  max-height: 400rpx;
+  margin-bottom: 24rpx;
+}
+
+.edit-food-item {
+  margin-bottom: 24rpx;
+  padding-bottom: 24rpx;
+  border-bottom: 1rpx solid var(--border);
+}
+
+.edit-input {
+  height: 72rpx;
+  background: #f9fafb;
+  border-radius: var(--radius-sm);
+  padding: 0 20rpx;
+  font-size: 28rpx;
+  margin-bottom: 12rpx;
+}
+
+.edit-row {
+  display: flex;
+  gap: 16rpx;
+}
+
+.edit-input.half {
+  flex: 1;
+}
+
+.edit-meta {
+  display: flex;
+  gap: 12rpx;
+  margin-bottom: 20rpx;
+}
+
+.edit-meta-item {
+  flex: 1;
+  text-align: center;
+  background: #f9fafb;
+  border-radius: var(--radius-md);
+  padding: 16rpx 8rpx;
+  font-size: 26rpx;
+  color: var(--text-main);
+}
+
+.edit-input.third {
+  flex: 1;
+}
+
+.modal-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 24rpx;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 20rpx;
+}
+
+.modal-btn {
+  flex: 1;
+  height: 80rpx;
+  line-height: 80rpx;
+  text-align: center;
+  border-radius: 999rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.modal-cancel {
+  background: #f3f4f6;
+  color: var(--text-secondary);
+}
+
+.modal-confirm {
+  background: var(--primary-gradient);
+  color: #fff;
+}
+
+.record-card {
+  margin-bottom: 24rpx;
+}
+
+.record-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx;
+  padding-bottom: 16rpx;
+  border-bottom: 1rpx solid var(--border);
+}
+
+.record-time {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+}
+
+.record-source {
+  font-size: 22rpx;
+  color: var(--primary);
+  background: var(--primary-light);
+  padding: 4rpx 14rpx;
+  border-radius: 999rpx;
+}
+
+.food-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18rpx 0;
+  border-bottom: 1rpx solid var(--border);
+}
+
+.food-row:last-child {
+  border-bottom: none;
+}
+
+.food-main {
+  display: flex;
+  flex-direction: column;
+}
+
+.food-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.food-weight {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+  margin-top: 4rpx;
+}
+
+.food-nutri {
+  text-align: right;
+}
+
+.food-cal {
+  display: block;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.food-macro {
+  display: block;
+  font-size: 22rpx;
+  color: var(--text-secondary);
+  margin-top: 4rpx;
+}
+
+.record-total {
+  margin-top: 16rpx;
+  font-size: 24rpx;
+  color: var(--text-secondary);
+  text-align: right;
+}
+
+.empty-state {
+  text-align: center;
+  color: var(--text-light);
+  font-size: 28rpx;
+  padding: 48rpx 0;
+}
+
+.fab {
+  position: fixed;
+  left: 64rpx;
+  right: 64rpx;
+  bottom: 48rpx;
+  background: var(--primary-gradient);
+  color: #fff;
+  height: 96rpx;
+  line-height: 96rpx;
+  border-radius: 999rpx;
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: 600;
+  box-shadow: 0 12rpx 32rpx rgba(59, 130, 246, 0.35);
+}
+
+.fab-text {
+  color: #fff;
+}
